@@ -63,7 +63,7 @@ class MeasurementBase(BaseModel):
 class MeasurementCreate(MeasurementBase):
     """
     MeasurementCreate class inherits from pydantic MeasurementBase and maps to
-    fields in POST request body for measurements of blood glucose, blood 
+    fields in POST request body for measurements of blood glucose, blood
     pressure, etc.
     """
 
@@ -80,8 +80,9 @@ class MeasurementCreate(MeasurementBase):
         )
     value_2: Optional[float] = Field(
         None,
-        description=
-        "second value of measurement for blood pressure. No Default",
+        description="""
+        second value of measurement for blood pressure. No Default
+        """,
         example=68
         )
     source: str = Field(
@@ -91,8 +92,9 @@ class MeasurementCreate(MeasurementBase):
         )
     time_taken: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
-        description=
-        "UTC timecode of time measurement was taken. Default is `now`",
+        description="""
+        UTC timecode of time measurement was taken. Default is `now`
+        """,
         example="2025-11-05T14:30:00Z"
         )
     note: Optional[str] = Field(
@@ -105,10 +107,10 @@ class MeasurementCreate(MeasurementBase):
         example="nausea, clammy"
         )
     created_at: datetime = Field(
-		default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(timezone.utc),
         description="time entry created"
-	)
-    
+        )
+
     @field_validator("value_2")
     @classmethod
     def validate_value2_for_bp(cls, value: float, info):
@@ -117,21 +119,22 @@ class MeasurementCreate(MeasurementBase):
             raise ValueError(
                 "value_2 is required for blood pressure measurement"
                 )
-        elif value != None:
+        elif value is not None:
             raise ValueError(
                 "value_2 is only allowed for blood pressure measurement"
             )
-    
+
+
 class MeasurementUpdate(MeasurementBase):
     """
-    MeasurmentUpdate class inherits optional fields from MeasurementBase class 
+    MeasurmentUpdate class inherits optional fields from MeasurementBase class
     and implements API owned updated_at timestamp creation.
     """
 
     updated_at: datetime = Field(
-		default_factory=lambda: datetime.now(timezone.utc),
+        default_factory=lambda: datetime.now(timezone.utc),
         description="time entry updated"
-	)
+        )
 
 
 class MeasurementRead(BaseModel):
@@ -175,7 +178,7 @@ class MeasurementRead(BaseModel):
         None,
         description="Time measurement entry updated"
         )
-    
+
     model_config = ConfigDict(
         from_attributes=True,
         extra="ignore",
@@ -190,11 +193,10 @@ class MeasurementRead(BaseModel):
                     "source": "wrist",
                     "note": None,
                     "symptoms": "lightheaded",
-                    "time_taken":"2025-11-05T14:29:00Z",
+                    "time_taken": "2025-11-05T14:29:00Z",
                     "created_at": "2025-11-05T14:30:00Z",
                     "updated_at": None
                 }
             ]
         }
     )
-    
