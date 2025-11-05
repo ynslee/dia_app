@@ -1,5 +1,5 @@
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 from pydantic import BaseModel, Field, Optional
 
 
@@ -16,7 +16,7 @@ class MeasurementType(str, Enum):
     WEIGHT = "wt"
 
 
-class Measurement(BaseModel):
+class MeasurementCreate(BaseModel):
     """
     Measurement class inherits from pydantic BaseModel and maps to fields in
     POST request body for measurements of blood glucose, blood pressure, etc.
@@ -25,17 +25,17 @@ class Measurement(BaseModel):
     # TODO: add limits
     measurement_type: MeasurementType = Field(
         ...,
-        description="Type of measurement: bp, hr, ht, wt, or bs",
+        description="Type of measurement: bp, hr, ht, wt, or bs. No default.",
         example="bs"
         )
     value_1: float = Field(
         ...,
-        description="value of measurement: bp, hr, ht, wt, or bs",
+        description="value of measurement as float. No default.",
         example=110
         )
     value_2: Optional[float] = Field(
         None,
-        description="second value of measurement for blood pressure",
+        description="second value of measurement for blood pressure. No Default",
         example=68
         )
     source: str = Field(
@@ -44,8 +44,8 @@ class Measurement(BaseModel):
         example="accucheck"
         )
     time_taken: datetime = Field(
-        ...,
-        description="UTC timecode of time measurement was taken",
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="UTC timecode of time measurement was taken. Default is time recieved (`now`)",
         example="2025-11-05T14:30:00Z"
         )
     note: Optional[str] = Field(
@@ -57,3 +57,7 @@ class Measurement(BaseModel):
         description="list of syptoms expereinced at time of measurement",
         example="nausea, clammy"
         )
+    created: datetime = Field(
+		default_factory=lambda: datetime.now(timezone.utc),
+        description="time entry created"
+	)
