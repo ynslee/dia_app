@@ -8,9 +8,9 @@ router = APIRouter(
 
 
 @router.get(
-    path="/"
+    path="/{item_id}"
     )
-def get_mesurement():
+def get_mesurement(item_id: int):
     return "I'm a mesurement!"
 
 
@@ -22,14 +22,14 @@ def new_mesurement():
 
 
 @router.patch(
-    path="/"
+    path="/{item_id}"
     )
-def new_mesurement():
+def new_mesurement(item_id: int):
     return "new user measurement"
 
 
 @router.delete(
-    path="/"
+    path="/{item_id}"
     )
-def new_mesurement():
+def new_mesurement(item_id: int):
     return "new user measurement"
