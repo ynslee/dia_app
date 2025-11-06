@@ -59,6 +59,19 @@ class MeasurementBase(BaseModel):
         example="nausea, clammy"
         )
 
+    @field_validator("value_2")
+    @classmethod
+    def validate_value2_for_bp(cls, value: float, info):
+        mt = info.data.get("measurement_type")
+        if mt == MeasurementType.BLOOD_PRESSURE and value is None:
+            raise ValueError(
+                "value_2 is required for blood pressure measurement"
+                )
+        elif value is not None:
+            raise ValueError(
+                "value_2 is only allowed for blood pressure measurement"
+            )
+
 
 class MeasurementCreate(MeasurementBase):
     """
@@ -110,19 +123,6 @@ class MeasurementCreate(MeasurementBase):
         default_factory=lambda: datetime.now(timezone.utc),
         description="time entry created"
         )
-
-    @field_validator("value_2")
-    @classmethod
-    def validate_value2_for_bp(cls, value: float, info):
-        mt = info.data.get("measurement_type")
-        if mt == MeasurementType.BLOOD_PRESSURE and value is None:
-            raise ValueError(
-                "value_2 is required for blood pressure measurement"
-                )
-        elif value is not None:
-            raise ValueError(
-                "value_2 is only allowed for blood pressure measurement"
-            )
 
 
 class MeasurementUpdate(MeasurementBase):
