@@ -17,19 +17,19 @@ def get_mesurement(item_id: int):
 @router.post(
     path="/"
     )
-def new_mesurement():
+def create_mesurement():
     return "new user measurement"
 
 
 @router.patch(
     path="/{item_id}"
     )
-def new_mesurement(item_id: int):
+def update_mesurement(item_id: int):
     return "new user measurement"
 
 
 @router.delete(
     path="/{item_id}"
     )
-def new_mesurement(item_id: int):
+def delete_mesurement(item_id: int):
     return "new user measurement"

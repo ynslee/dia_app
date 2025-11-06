@@ -20,6 +20,7 @@ def get_measurements():
 def new_measurements():
     return "new measurements created"
 
+
 @router.patch(
     path="/"
     )
@@ -30,5 +31,5 @@ def update_measurements():
 @router.delete(
     path="/"
     )
-def new_measurements():
+def delete_measurements():
     return "measurements deleted"
