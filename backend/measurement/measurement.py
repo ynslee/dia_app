@@ -18,18 +18,18 @@ def get_mesurement(item_id: int):
     path="/"
     )
 def create_mesurement():
-    return "new user measurement"
+    return "new measurement created"
 
 
 @router.patch(
     path="/{item_id}"
     )
 def update_mesurement(item_id: int):
-    return "new user measurement"
+    return "measurement updated"
 
 
 @router.delete(
     path="/{item_id}"
     )
 def delete_mesurement(item_id: int):
-    return "new user measurement"
+    return "measurement deleted"
