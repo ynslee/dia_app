@@ -1,6 +1,6 @@
 from enum import Enum
 from datetime import datetime, timezone
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Optional
 
 
@@ -61,10 +61,14 @@ class MeasurementBase(BaseModel):
         max_length=300
         )
 
-    @field_validator("value_2")
+# TODO: extend this to check all ranges in values
+    @model_validator("value_2", mode='after')
     @classmethod
-    def validate_value2_for_bp(cls, value: float, info):
-        mt = info.data.get("measurement_type")
+    def validate_value2_for_bp(cls, model):
+        mt = model.data.get("measurement_type")
+        value = model.data.get("value_2")
+        if mt is None:
+            return
         if mt == MeasurementType.BLOOD_PRESSURE and value is None:
             raise ValueError(
                 "value_2 is required for blood pressure measurement"
