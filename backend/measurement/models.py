@@ -23,7 +23,6 @@ class MeasurementBase(BaseModel):
     fields request body for measurements of blood glucose, blood pressure, etc.
     """
 
-    # TODO: add limits
     measurement_type: Optional[MeasurementType] = Field(
         None,
         description="Type of measurement: bp, hr, ht, wt, or bs. No default.",
@@ -42,7 +41,8 @@ class MeasurementBase(BaseModel):
     source: Optional[str] = Field(
         None,
         description="device used to take measurement.",
-        example="accucheck"
+        example="accucheck",
+        max_length=100
         )
     time_taken: Optional[datetime] = Field(
         None,
@@ -51,12 +51,14 @@ class MeasurementBase(BaseModel):
         )
     note: Optional[str] = Field(
         None,
-        description="User entered note about measurement"
+        description="User entered note about measurement",
+        max_length=300
         )
     symptoms: Optional[str] = Field(
         None,
         description="list of syptoms expereinced at time of measurement",
-        example="nausea, clammy"
+        example="nausea, clammy",
+        max_length=300
         )
 
     @field_validator("value_2")
@@ -80,7 +82,6 @@ class MeasurementCreate(MeasurementBase):
     pressure, etc.
     """
 
-    # TODO: add limits
     measurement_type: MeasurementType = Field(
         ...,
         description="Type of measurement: bp, hr, ht, wt, or bs. No default.",
@@ -89,19 +90,24 @@ class MeasurementCreate(MeasurementBase):
     value_1: float = Field(
         ...,
         description="value of measurement as float. No default.",
-        example=110
+        example=110,
+        le=1000.0,
+        ge=0.0
         )
     value_2: Optional[float] = Field(
         None,
         description="""
         second value of measurement for blood pressure. No Default
         """,
-        example=68
+        example=68,
+        le=1000.0,
+        ge=0.0
         )
     source: str = Field(
         "manual",
         description="device used to take measurement. Default is `manual`",
-        example="accucheck"
+        example="accucheck",
+        max_length=100
         )
     time_taken: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
@@ -112,12 +118,14 @@ class MeasurementCreate(MeasurementBase):
         )
     note: Optional[str] = Field(
         None,
-        description="User entered note about measurement"
+        description="User entered note about measurement",
+        max_length=300
         )
     symptoms: Optional[str] = Field(
         None,
         description="list of syptoms expereinced at time of measurement",
-        example="nausea, clammy"
+        example="nausea, clammy",
+        max_length=300
         )
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
