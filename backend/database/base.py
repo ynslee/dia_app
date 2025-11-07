@@ -2,8 +2,8 @@ from abc import abstractmethod
 import datetime
 from typing import List
 from pydantic import BaseModel
-from backend.measurement.models import MeasurementCreate, MeasurementUpdate
-from backend.measurement.models import MeasurementType
+from backend.models.measurement import MeasurementCreate, MeasurementUpdate
+from backend.models.measurement import MeasurementType
 
 
 class Datastore(BaseModel):
