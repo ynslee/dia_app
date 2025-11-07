@@ -73,10 +73,6 @@ class MeasurementBase(BaseModel):
             raise ValueError(
                 "value_2 is required for blood pressure measurement"
                 )
-        elif value is not None:
-            raise ValueError(
-                "value_2 is only allowed for blood pressure measurement"
-            )
 
 
 class MeasurementCreate(MeasurementBase):
