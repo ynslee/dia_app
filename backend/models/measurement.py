@@ -62,9 +62,9 @@ class MeasurementBase(BaseModel):
         )
 
 # TODO: extend this to check all ranges in values
-    @model_validator("value_2", mode='after')
-    def validate_value2_for_bp(cls, model):
-        data = model.model_dump()
+    @model_validator(mode='after')
+    def validate_value2_for_bp(self):
+        data = self.model_dump()
         mt = data.get("measurement_type")
         value = data.get("value_2")
         if mt is None:
@@ -73,6 +73,7 @@ class MeasurementBase(BaseModel):
             raise ValueError(
                 "value_2 is required for blood pressure measurement"
                 )
+        return self
 
 
 class MeasurementCreate(MeasurementBase):

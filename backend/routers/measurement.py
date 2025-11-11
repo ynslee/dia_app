@@ -1,4 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from database.base import Datastore
+from database.mockdb import open_db_sesssion
+from models.measurement import MeasurementRead
 
 
 router = APIRouter(
@@ -8,10 +11,12 @@ router = APIRouter(
 
 
 @router.get(
-    path="/{item_id}"
+    path="/{item_id}",
+    response_model=MeasurementRead
     )
-def get_mesurement(item_id: int):
-    return "I'm a mesurement!"
+async def get_mesurement(item_id: int, db: Datastore = Depends(open_db_sesssion)):
+    measurement = await db.get_measurement_by_id(item_id)
+    return measurement
 
 
 @router.post(
