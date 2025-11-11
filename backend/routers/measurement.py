@@ -14,7 +14,8 @@ router = APIRouter(
     path="/{item_id}",
     response_model=MeasurementRead
     )
-async def get_mesurement(item_id: int, db: Datastore = Depends(open_db_sesssion)):
+async def get_mesurement(item_id: int,
+                         db: Datastore = Depends(open_db_sesssion)):
     measurement = await db.get_measurement_by_id(item_id)
     return measurement
 

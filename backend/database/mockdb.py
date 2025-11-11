@@ -10,7 +10,7 @@ class MockDB(Datastore):
     MockDB inherits from Datastore and provides a mock database object with
     dummy data and implements all abstract methods from Datastore methods.
     """
-    
+
     def __init__(self):
         self._measurements = [
             MeasurementCreate(
@@ -21,10 +21,10 @@ class MockDB(Datastore):
                 source="accucheck",
                 note=None,
                 symptoms=None,
-			)
+                )
             ]
         self._accounts = []
-    
+
     async def get_measurement_by_id(self, id: int):
         measurment = MeasurementRead(
             id=id,
@@ -39,23 +39,18 @@ class MockDB(Datastore):
             updated_at=None,
             )
         return measurment
-    
-    
+
     async def create_measurement(self, measuremnt: MeasurementCreate):
         pass
-
 
     async def update_measurement(self, measurement: MeasurementUpdate):
         pass
 
-
     async def delete_measurement(self, id: int):
         pass
 
-
     async def get_all_measuremnts_for_day(self, date: datetime):
         pass
-
 
     async def bulk_entry_of_measuremnts(
         self,
@@ -63,12 +58,9 @@ class MockDB(Datastore):
     ):
         pass
 
-
-    async def bulk_update_of_measuremnts(
-        self,
-        updates: List[MeasurementUpdate]):
+    async def bulk_update_of_measuremnts(self,
+                                         updates: List[MeasurementUpdate]):
         pass
-
 
     async def delete_all_measuremnts_of_a_type(self, type: MeasurementType):
         pass

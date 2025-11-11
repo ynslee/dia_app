@@ -1,14 +1,15 @@
-import pytest
+# import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from routers import measurement
-from models.measurement import MeasurementCreate, MeasurementRead
-from models.measurement import MeasurementUpdate, MeasurementType
+# from models.measurement import MeasurementCreate, MeasurementRead
+# from models.measurement import MeasurementUpdate, MeasurementType
+
 
 def get_client():
-	app = FastAPI(title="Mesurements API")
-	app.include_router(measurement.router)
-	return TestClient(app)
+    app = FastAPI(title="Mesurements API")
+    app.include_router(measurement.router)
+    return TestClient(app)
 
 
 def test_get_measurement():
