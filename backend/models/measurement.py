@@ -26,28 +26,28 @@ class MeasurementBase(BaseModel):
     measurement_type: Optional[MeasurementType] = Field(
         None,
         description="Type of measurement: bp, hr, ht, wt, or bs. No default.",
-        example="bs"
+        json_schema_extra={"example": "bs"}
         )
     value_1: Optional[float] = Field(
         None,
         description="value of measurement as float.",
-        example=110
+        json_schema_extra={"example": 110}
         )
     value_2: Optional[float] = Field(
         None,
         description="second value of measurement for blood pressure.",
-        example=68
+        json_schema_extra={"example": 68}
         )
     source: Optional[str] = Field(
         None,
         description="device used to take measurement.",
-        example="accucheck",
+        json_schema_extra={"example": "accucheck"},
         max_length=100
         )
     time_taken: Optional[datetime] = Field(
         None,
         description="UTC timecode of time measurement was taken.",
-        example="2025-11-05T14:30:00Z"
+        json_schema_extra={"example": "2025-11-05T14:30:00Z"}
         )
     note: Optional[str] = Field(
         None,
@@ -57,7 +57,7 @@ class MeasurementBase(BaseModel):
     symptoms: Optional[str] = Field(
         None,
         description="list of syptoms expereinced at time of measurement",
-        example="nausea, clammy",
+        json_schema_extra={"example": "nausea, clammy"},
         max_length=300
         )
 
@@ -86,12 +86,12 @@ class MeasurementCreate(MeasurementBase):
     measurement_type: MeasurementType = Field(
         ...,
         description="Type of measurement: bp, hr, ht, wt, or bs. No default.",
-        example="bs"
+        json_schema_extra={"example": "bs"}
         )
     value_1: float = Field(
         ...,
         description="value of measurement as float. No default.",
-        example=110,
+        json_schema_extra={"example": 110},
         le=1000.0,
         ge=0.0
         )
@@ -100,14 +100,14 @@ class MeasurementCreate(MeasurementBase):
         description="""
         second value of measurement for blood pressure. No Default
         """,
-        example=68,
+        json_schema_extra={"example": 68},
         le=1000.0,
         ge=0.0
         )
     source: str = Field(
         "manual",
         description="device used to take measurement. Default is `manual`",
-        example="accucheck",
+        json_schema_extra={"example": "accucheck"},
         max_length=100
         )
     time_taken: datetime = Field(
@@ -115,7 +115,7 @@ class MeasurementCreate(MeasurementBase):
         description="""
         UTC timecode of time measurement was taken. Default is `now`
         """,
-        example="2025-11-05T14:30:00Z"
+        json_schema_extra={"example": "2025-11-05T14:30:00Z"}
         )
     note: Optional[str] = Field(
         None,
@@ -125,7 +125,7 @@ class MeasurementCreate(MeasurementBase):
     symptoms: Optional[str] = Field(
         None,
         description="list of syptoms expereinced at time of measurement",
-        example="nausea, clammy",
+        json_schema_extra={"example": "nausea, clammy"},
         max_length=300
         )
     created_at: datetime = Field(
