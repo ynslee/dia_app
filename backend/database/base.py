@@ -6,7 +6,7 @@ import datetime
 from typing import List
 from pydantic import BaseModel
 from models.measurement import (
-    MeasurementCreate, 
+    MeasurementCreate,
     MeasurementUpdate,
     MeasurementType
 )
