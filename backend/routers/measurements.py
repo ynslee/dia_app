@@ -11,6 +11,9 @@ router = APIRouter(
     path="/"
     )
 def get_measurements():
+    """
+    get_measurements uses GET method.
+    """
     return "I'm a lot of measurements!"
 
 
@@ -18,6 +21,9 @@ def get_measurements():
     path="/"
     )
 def new_measurements():
+    """
+    new_measurements uses POST method.
+    """
     return "new measurements created"
 
 
@@ -25,6 +31,9 @@ def new_measurements():
     path="/"
     )
 def update_measurements():
+    """
+    update_measurements uses PATCH method.
+    """
     return "measurements updated"
 
 
@@ -32,4 +41,7 @@ def update_measurements():
     path="/"
     )
 def delete_measurements():
+    """
+    delete_measurements uses DELETE method.
+    """
     return "measurements deleted"

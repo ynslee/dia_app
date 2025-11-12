@@ -67,4 +67,7 @@ class MockDB(Datastore):
 
 
 def open_db_sesssion():
+    """
+    open_db_session returns MockDB instance for testing purposes.
+    """
     return MockDB()

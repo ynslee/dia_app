@@ -1,7 +1,7 @@
 from enum import Enum
 from datetime import datetime, timezone
-from pydantic import BaseModel, ConfigDict, Field, model_validator
 from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
 class MeasurementType(str, Enum):
@@ -147,6 +147,10 @@ class MeasurementUpdate(MeasurementBase):
 
 
 class MeasurementRead(BaseModel):
+    """
+    MeasusrementRead class inherits from pydantic BaseModel and provides all
+    fields needed for fufillment of GET requests.
+    """
     id: int = Field(
         ...,
         description="Database primary key"

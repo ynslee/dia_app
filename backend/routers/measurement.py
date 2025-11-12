@@ -16,6 +16,10 @@ router = APIRouter(
     )
 async def get_mesurement(item_id: int,
                          db: Datastore = Depends(open_db_sesssion)):
+    """
+    get_measurement uses GET method and returns mesurement with id given as a
+    path parameter.
+    """
     measurement = await db.get_measurement_by_id(item_id)
     return measurement
 
@@ -24,6 +28,9 @@ async def get_mesurement(item_id: int,
     path="/"
     )
 def create_mesurement():
+    """
+    create_measurement uses POST method.
+    """
     return "new measurement created"
 
 
@@ -31,6 +38,9 @@ def create_mesurement():
     path="/{item_id}"
     )
 def update_mesurement(item_id: int):
+    """
+    update_measurement uses PATCH method.
+    """
     return "measurement updated"
 
 
@@ -38,4 +48,7 @@ def update_mesurement(item_id: int):
     path="/{item_id}"
     )
 def delete_mesurement(item_id: int):
+    """
+    delete_measurement uses DELETE method.
+    """
     return "measurement deleted"
