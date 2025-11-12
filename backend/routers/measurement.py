@@ -3,7 +3,7 @@
 
 from database.base import Datastore
 from database.mockdb import open_db_sesssion
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response
 from fastapi.responses import JSONResponse
 from models.measurement import MeasurementRead
 
@@ -18,8 +18,10 @@ router = APIRouter(
     path="/{item_id}",
     response_model=MeasurementRead
     )
-async def get_mesurement(item_id: int,
-                         db: Datastore = Depends(open_db_sesssion)):
+async def get_mesurement(
+    item_id: int,
+    db: Datastore = Depends(open_db_sesssion)
+    ) -> Response:
     """
     get_measurement uses GET method and returns mesurement with id given as a
     path parameter.
