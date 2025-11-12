@@ -20,6 +20,7 @@ class MockDB(Datastore):
 
     def __init__(self):
         super().__init__()
+        self._next_id = 2
         self._measurements = [
             MeasurementCreate(
                 measurement_type="bs",
@@ -51,8 +52,11 @@ class MockDB(Datastore):
             )
         return measurment
 
-    async def create_measurement(self, measuremnt: MeasurementCreate):
-        pass
+    async def create_measurement(self, measurement: MeasurementCreate):
+        self._measurements.append(measurement)
+        new_id = self._next_id
+        self._next_id += 1
+        return new_id
 
     async def update_measurement(self, measurement: MeasurementUpdate):
         pass

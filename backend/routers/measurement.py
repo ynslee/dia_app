@@ -5,7 +5,7 @@ from database.base import Datastore
 from database.mockdb import open_db_sesssion
 from fastapi import APIRouter, Depends, status, Response
 from fastapi.responses import JSONResponse
-from models.measurement import MeasurementRead
+from models.measurement import MeasurementCreate, MeasurementRead
 
 
 router = APIRouter(
@@ -38,11 +38,18 @@ async def get_mesurement(
 @router.post(
     path="/"
     )
-def create_mesurement():
+async def create_mesurement(
+    mesurement: MeasurementCreate,
+    db: Datastore = Depends(open_db_sesssion)
+    ) -> Response:
     """
     create_measurement uses POST method.
     """
-    return "new measurement created"
+    new_id = await db.create_measurement(mesurement)
+    return JSONResponse(
+        status_code=status.HTTP_201_CREATED,
+        content={"message":"new measurement created", "id":f"{new_id}"}
+        )
 
 
 @router.patch(

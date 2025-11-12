@@ -56,3 +56,33 @@ def test_get_measurement_bad_id(bad_id, status_code):
     client = get_client()
     response = client.get(f"/measurement/{bad_id}")
     assert response.status_code == status_code
+
+
+def test_post_measurement():
+    client = get_client()
+    payload = {
+        "measurement_type": "bs",
+        "value_1": 97,
+        "value_2": None,
+        "time_taken": "2025-11-05T14:29:00Z",
+        "source": "accucheck",
+        "note": None,
+        "symptoms": None,
+        }
+    response = client.post(f"/measurement", json=payload)
+    assert response.status_code == status.HTTP_201_CREATED
+    assert response.json()["id"] == "2"
+    
+
+def test_post_measurement_bad_payload():
+    client = get_client()
+    payload = {
+        "value_1": 97,
+        "value_2": None,
+        "time_taken": "2025-11-05T14:29:00Z",
+        "source": "accucheck",
+        "note": None,
+        "symptoms": None,
+        }
+    response = client.post(f"/measurement", json=payload)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
