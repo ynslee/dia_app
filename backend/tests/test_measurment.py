@@ -45,15 +45,14 @@ def test_get_measurement():
 
 
 @pytest.mark.parametrize(
-    "bad_id",
+    "bad_id, status_code",
     [
-        -1,
-        "a",
-        "",
+       (-1, status.HTTP_400_BAD_REQUEST),
+       ("a", status.HTTP_422_UNPROCESSABLE_ENTITY),
+       ("", status.HTTP_405_METHOD_NOT_ALLOWED),
     ],
 )
-def test_get_measurement_bad_id(bad_id):
+def test_get_measurement_bad_id(bad_id, status_code):
     client = get_client()
     response = client.get(f"/measurement/{bad_id}")
-    assert response.status_code == status.HTTP_400_BAD_REQUEST
-    
+    assert response.status_code == status_code

@@ -3,7 +3,8 @@
 
 from database.base import Datastore
 from database.mockdb import open_db_sesssion
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
+from fastapi.responses import JSONResponse
 from models.measurement import MeasurementRead
 
 
@@ -23,6 +24,11 @@ async def get_mesurement(item_id: int,
     get_measurement uses GET method and returns mesurement with id given as a
     path parameter.
     """
+    if item_id < 0:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": "invalid id sent"},
+            )
     measurement = await db.get_measurement_by_id(item_id)
     return measurement
 
