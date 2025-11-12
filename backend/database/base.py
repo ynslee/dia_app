@@ -1,12 +1,12 @@
+"""Base class and functions for defingin database related functions."""
+
+
 from abc import abstractmethod
 import datetime
 from typing import List
 from pydantic import BaseModel
 from models.measurement import MeasurementCreate, MeasurementUpdate
 from models.measurement import MeasurementType
-
-
-"""Base class and functions for defingin database related functions."""
 
 
 class Datastore(BaseModel):

@@ -1,7 +1,7 @@
-from fastapi import APIRouter
-
-
 """Router for handling multi-measurement API endpoints."""
+
+
+from fastapi import APIRouter
 
 
 router = APIRouter(
