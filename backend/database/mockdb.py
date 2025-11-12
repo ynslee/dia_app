@@ -33,7 +33,10 @@ class MockDB(Datastore):
             ]
         self._accounts = []
 
-    async def get_measurement_by_id(self, measurement_id: int):
+    async def get_measurement_by_id(
+        self,
+        measurement_id: int,
+    ) -> MeasurementRead:
         measurment = MeasurementRead(
             id=measurement_id,
             measurement_type=MeasurementType.BLOOD_PRESSURE,
