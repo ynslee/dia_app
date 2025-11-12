@@ -26,6 +26,7 @@ jobs:
         uses: super-linter/super-linter@v7.3.0
         env: 
           DEFAULT_BRANCH: develop
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}\
+          PYTHONPATH: backend
           SAVE_SUPER_LINTER_SUMMARY: true
           ENABLE_GITHUB_ACTIONS_STEP_SUMMARY: true
