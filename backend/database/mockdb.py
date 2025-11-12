@@ -4,8 +4,12 @@
 from datetime import datetime, timezone
 from typing import List
 from database.base import Datastore
-from models.measurement import MeasurementCreate, MeasurementUpdate
-from models.measurement import MeasurementType, MeasurementRead
+from models.measurement import (
+    MeasurementCreate,
+    MeasurementUpdate,
+    MeasurementType,
+    MeasurementRead
+)
 
 
 class MockDB(Datastore):

@@ -2,8 +2,8 @@
 # pylint: disable=too-few-public-methods
 
 
-from enum import Enum
 from datetime import datetime, timezone
+from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 

@@ -1,9 +1,9 @@
 """Router for handling single measurement API endpoints."""
 
 
-from fastapi import APIRouter, Depends
 from database.base import Datastore
 from database.mockdb import open_db_sesssion
+from fastapi import APIRouter, Depends
 from models.measurement import MeasurementRead
 
 

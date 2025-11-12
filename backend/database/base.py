@@ -5,8 +5,11 @@ from abc import abstractmethod
 import datetime
 from typing import List
 from pydantic import BaseModel
-from models.measurement import MeasurementCreate, MeasurementUpdate
-from models.measurement import MeasurementType
+from models.measurement import (
+    MeasurementCreate, 
+    MeasurementUpdate,
+    MeasurementType
+)
 
 
 class Datastore(BaseModel):
@@ -34,7 +37,7 @@ class Datastore(BaseModel):
         """
 
     @abstractmethod
-    async def delete_measurement(self, mesurement_id: int):
+    async def delete_measurement(self, measurement_id: int):
         """
         abstract method for deleting single measuement by id.
         """
@@ -62,7 +65,7 @@ class Datastore(BaseModel):
         """
 
     @abstractmethod
-    async def delete_all_measuremnts_of_a_type(self, type: MeasurementType):
+    async def delete_all_measuremnts_of_a_type(self, m_type: MeasurementType):
         """
         abstract method for deleting many measuements by type.
         """
