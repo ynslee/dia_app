@@ -4,6 +4,10 @@ from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 
+"""Models for measurements"""
+# pylint: disable=too-few-public-methods
+
+
 class MeasurementType(str, Enum):
     """
     MeasurementType class is an Enum of accepted measurements to validate
@@ -64,11 +68,15 @@ class MeasurementBase(BaseModel):
 # TODO: extend this to check all ranges in values
     @model_validator(mode='after')
     def validate_value2_for_bp(self):
+        """
+        validate_value2_for_bp checks that value2 is included for blood
+        pressure measurements and not present for other measurements.
+        """
         data = self.model_dump()
         mt = data.get("measurement_type")
         value = data.get("value_2")
         if mt is None:
-            return
+            return self
         if mt == MeasurementType.BLOOD_PRESSURE and value is None:
             raise ValueError(
                 "value_2 is required for blood pressure measurement"

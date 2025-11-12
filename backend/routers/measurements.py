@@ -1,6 +1,9 @@
 from fastapi import APIRouter
 
 
+"""Router for handling multi-measurement API endpoints."""
+
+
 router = APIRouter(
     prefix="/measurements",
     tags=["measurements"]

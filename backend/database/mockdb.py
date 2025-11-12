@@ -1,8 +1,11 @@
 from datetime import datetime, timezone
-from database.base import Datastore
 from typing import List
+from database.base import Datastore
 from models.measurement import MeasurementCreate, MeasurementUpdate
 from models.measurement import MeasurementType, MeasurementRead
+
+
+"""Mock database class and functions."""
 
 
 class MockDB(Datastore):
@@ -12,6 +15,7 @@ class MockDB(Datastore):
     """
 
     def __init__(self):
+        super().__init__()
         self._measurements = [
             MeasurementCreate(
                 measurement_type="bs",
@@ -25,9 +29,9 @@ class MockDB(Datastore):
             ]
         self._accounts = []
 
-    async def get_measurement_by_id(self, id: int):
+    async def get_measurement_by_id(self, measurement_id: int):
         measurment = MeasurementRead(
-            id=id,
+            id=measurement_id,
             measurement_type=MeasurementType.BLOOD_PRESSURE,
             value_1=120.0,
             value_2=78.0,
@@ -46,7 +50,7 @@ class MockDB(Datastore):
     async def update_measurement(self, measurement: MeasurementUpdate):
         pass
 
-    async def delete_measurement(self, id: int):
+    async def delete_measurement(self, measurement_id: int):
         pass
 
     async def get_all_measuremnts_for_day(self, date: datetime):
@@ -62,7 +66,7 @@ class MockDB(Datastore):
                                          updates: List[MeasurementUpdate]):
         pass
 
-    async def delete_all_measuremnts_of_a_type(self, type: MeasurementType):
+    async def delete_all_measuremnts_of_a_type(self, m_type: MeasurementType):
         pass
 
 

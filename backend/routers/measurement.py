@@ -4,6 +4,9 @@ from database.mockdb import open_db_sesssion
 from models.measurement import MeasurementRead
 
 
+"""Router for handling single measurement API endpoints."""
+
+
 router = APIRouter(
     prefix="/measurement",
     tags=["measurement"]

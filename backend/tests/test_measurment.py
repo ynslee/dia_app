@@ -6,13 +6,22 @@ from routers import measurement
 # from models.measurement import MeasurementUpdate, MeasurementType
 
 
+"""Tests for single measurement API endpoints."""
+
+
 def get_client():
+    """
+    Prepares and returns FastAPI client with measurement router added.
+    """
     app = FastAPI(title="Mesurements API")
     app.include_router(measurement.router)
     return TestClient(app)
 
 
 def test_get_measurement():
+    """
+    Tests get measurement endpoint.
+    """
     client = get_client()
     test_id = 1
     response = client.get(f"/measurement/{test_id}")
