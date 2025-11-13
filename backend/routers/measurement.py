@@ -4,7 +4,7 @@
 from database.base import Datastore
 from database.mockdb import open_db_sesssion
 from fastapi import APIRouter, Depends
-from models.measurement import MeasurementRead
+from schemas.measurement import MeasurementRead
 
 
 router = APIRouter(

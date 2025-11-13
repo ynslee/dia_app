@@ -5,7 +5,7 @@ from abc import abstractmethod
 import datetime
 from typing import List
 from pydantic import BaseModel
-from models.measurement import (
+from schemas.measurement import (
     MeasurementCreate,
     MeasurementUpdate,
     MeasurementType
