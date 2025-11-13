@@ -1,4 +1,4 @@
-"""Models for measurements"""
+"""Pydantic Schemas for measurements"""
 # pylint: disable=too-few-public-methods
 
 
@@ -6,19 +6,7 @@ from datetime import datetime, timezone
 from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
-
-
-class MeasurementType(str, Enum):
-    """
-    MeasurementType class is an Enum of accepted measurements to validate
-    incoming requests.
-    """
-
-    BLOOD_PRESSURE = "bp"
-    HEART_RATE = "hr"
-    BLOOD_SUGAR = "bs"
-    HEIGHT = "ht"
-    WEIGHT = "wt"
+from models.measurements import MeasurementType
 
 
 class MeasurementBase(BaseModel):
