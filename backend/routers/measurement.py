@@ -73,4 +73,9 @@ async def delete_mesurement(
     """
     delete_measurement uses DELETE method.
     """
+    if item_id < 0:
+        return JSONResponse(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            content={"message": "invalid id sent"},
+            )
     await db.delete_measurement(item_id)
