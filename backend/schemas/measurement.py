@@ -3,7 +3,6 @@
 
 
 from datetime import datetime, timezone
-from enum import Enum
 from typing import Optional
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 from models.measurements import MeasurementType
