@@ -68,7 +68,7 @@ async def update_mesurement(
     """
     update_measurement uses PATCH method.
     """
-    await db.update_measurement(id, item)
+    await db.update_measurement(item_id, item)
     return "measurement updated"
 
 
