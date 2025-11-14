@@ -58,7 +58,11 @@ class MockDB(Datastore):
         self._next_id += 1
         return new_id
 
-    async def update_measurement(self, measurement: MeasurementUpdate):
+    async def update_measurement(
+        self,
+        measurement_id:int,
+        measurement: MeasurementUpdate
+        ):
         pass
 
     async def delete_measurement(self, measurement_id: int):

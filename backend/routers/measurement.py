@@ -5,7 +5,11 @@ from database.base import Datastore
 from database.mockdb import open_db_sesssion
 from fastapi import APIRouter, Depends, status, Response
 from fastapi.responses import JSONResponse
-from models.measurement import MeasurementCreate, MeasurementRead
+from models.measurement import (
+    MeasurementCreate,
+    MeasurementRead,
+    MeasurementUpdate
+)
 
 
 router = APIRouter(
@@ -52,14 +56,19 @@ async def create_mesurement(
         content={"message":"new measurement created", "id":f"{new_id}"}
         )
 
-
+# TODO: decide if we want edited measurement returned
 @router.patch(
     path="/{item_id}"
     )
-def update_mesurement(item_id: int):
+async def update_mesurement(
+    item_id: int,
+    item: MeasurementUpdate,
+    db: Datastore = Depends(open_db_sesssion)
+    ) -> Response:
     """
     update_measurement uses PATCH method.
     """
+    await db.update_measurement(id, item)
     return "measurement updated"
 
 

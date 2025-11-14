@@ -31,7 +31,11 @@ class Datastore(BaseModel):
         """
 
     @abstractmethod
-    async def update_measurement(self, measurement: MeasurementUpdate):
+    async def update_measurement(
+        self,
+        measurement_id:int,
+        measurement: MeasurementUpdate
+        ):
         """
         abstract method for updating single measuement by id.
         """
