@@ -2,6 +2,7 @@
 
 
 import pytest
+from datetime import datetime, timezone
 from fastapi import FastAPI, status
 from fastapi.testclient import TestClient
 from routers import measurement
@@ -30,18 +31,13 @@ def test_get_measurement():
     test_id = 1
     response = client.get(f"/measurement/{test_id}")
     assert response.status_code == status.HTTP_200_OK
-    assert response.json() == {
-                    "id": 1,
-                    "measurement_type": "bp",
-                    "value_1": 120,
-                    "value_2": 78,
-                    "source": "wrist",
-                    "note": None,
-                    "symptoms": "lightheaded",
-                    "time_taken": "2025-11-05T14:29:00Z",
-                    "created_at": "2025-11-05T14:30:00Z",
-                    "updated_at": None
-                    }
+    assert response.json()["id"] == 1
+    assert response.json()["value_1"] == 120
+    assert response.json()["value_2"] == 78
+    assert response.json()["measurement_type"] == "bp"
+    assert response.json()["source"] == "wrist"
+    assert response.json()["note"] == None
+    assert response.json()["symptoms"] == "lightheaded"
 
 
 @pytest.mark.parametrize(
@@ -86,3 +82,20 @@ def test_post_measurement_bad_payload():
         }
     response = client.post(f"/measurement", json=payload)
     assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
+
+
+def test_patch_measurement():
+    client = get_client()
+    payload = {
+        "value_1": 88,
+        "value_2": None,
+        "time_taken": "2025-11-05T14:29:00Z",
+        "source": "accucheck",
+        "note": None,
+        "symptoms": None,
+        }
+    item_id = 1
+    response = client.patch(f"/measurement/{item_id}", json=payload)
+    assert response.status_code == status.HTTP_200_OK
+    # get_changed_measuremnt = client.get(f"/measurement/{item_id}")
+    assert response.json()["value_1"] == payload["value_1"]

@@ -73,7 +73,9 @@ async def update_mesurement(
             status_code=status.HTTP_400_BAD_REQUEST,
             content={"message": "invalid id sent"},
             )
-    await db.update_measurement(id, item)
+    updated = await db.update_measurement(item_id, item)
+    # TODO check status code for return
+    return updated
 
 
 @router.delete(

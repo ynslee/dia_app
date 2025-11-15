@@ -21,49 +21,59 @@ class MockDB(Datastore):
     def __init__(self):
         super().__init__()
         self._next_id = 2
-        self._measurements = [
-            MeasurementCreate(
-                measurement_type="bs",
-                value_1=97,
-                value_2=None,
-                time_taken="2025-11-05T14:29:00Z",
-                source="accucheck",
-                note=None,
-                symptoms=None,
-                )
-            ]
+        self._measurements = {
+            1: {
+                "measurement_type": "bp",
+                "value_1": 120,
+                "value_2": 78,
+                "time_taken": datetime.now(timezone.utc),
+                "source":"wrist",
+                "note": None,
+                "symptoms": "lightheaded",
+                "updated_at": datetime.now(timezone.utc),
+                "created_at": datetime.now(timezone.utc),
+                },
+        }
         self._accounts = []
 
     async def get_measurement_by_id(
         self,
         measurement_id: int,
     ) -> MeasurementRead:
-        measurment = MeasurementRead(
-            id=measurement_id,
-            measurement_type=MeasurementType.BLOOD_PRESSURE,
-            value_1=120.0,
-            value_2=78.0,
-            source="wrist",
-            note=None,
-            symptoms="lightheaded",
-            time_taken=datetime(2025, 11, 5, 14, 29, tzinfo=timezone.utc),
-            created_at=datetime(2025, 11, 5, 14, 30, tzinfo=timezone.utc),
-            updated_at=None,
-            )
-        return measurment
+        measurement = self._measurements[measurement_id]
+        return MeasurementRead(id=measurement_id, **measurement)
 
     async def create_measurement(self, measurement: MeasurementCreate):
-        self._measurements.append(measurement)
+        
+        now = datetime.now(timezone.utc)
+
+        data = measurement.model_dump()
+        data["created_at"] = now
+        data["updated_at"] = now
+
         new_id = self._next_id
         self._next_id += 1
+
+        self._measurements[new_id] = data
         return new_id
+        # return MeasurementRead(id=new_id, **data)
 
     async def update_measurement(
         self,
         measurement_id:int,
         measurement: MeasurementUpdate
         ):
-        pass
+        
+        existing = self._measurements[measurement_id]
+        update_data = measurement.model_dump(exclude_unset=True)
+
+        for key, value in update_data.items():
+            existing[key] = value
+
+        existing["updated_at"] = datetime.now(timezone.utc)
+        self._measurements[measurement_id] = existing
+
+        return MeasurementRead(id=measurement_id, **existing)
 
     async def delete_measurement(self, measurement_id: int):
         pass
