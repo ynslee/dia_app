@@ -13,12 +13,7 @@ from sqlalchemy.orm import (
     Mapped,
     mapped_column
 )
-from db import Base
-
-
-# TODO: move to a utlities type location
-def utcnow() -> datetime:
-    return datetime.now(timezone.utc)
+from db import Base, utcnow
 
 
 # Enums
