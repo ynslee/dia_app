@@ -13,9 +13,10 @@ from sqlalchemy.orm import (
     Mapped,
     mapped_column
 )
+from db import Base
 
 
-# other TODO: move to a utlities type location
+# TODO: move to a utlities type location
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
 
@@ -41,7 +42,7 @@ MAX_NOTE_LENGTH = 200
 
 
 # Tables
-class Measurement():  # TODO inherit base class
+class Measurement(Base):
     """
     Measurement model sets up the measurement table using sqlalchemy.
     """
