@@ -4,7 +4,7 @@ import enum
 from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum, Index
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from .db import Base
+from db import Base
 
 try:
     from sqlalchemy.dialects.postgresql import JSONB  # type: ignore
