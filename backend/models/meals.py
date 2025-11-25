@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     Enum as SAEnum,
     ARRAY,
+    CheckConstraint
     )
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -75,10 +76,38 @@ class Meal(Base):
         index=True
         )
     # TODO: should these be nullable or not show them depending on settings?
-    carbs: Mapped[int] = mapped_column(Integer, nullable=True)
-    protein: Mapped[int] = mapped_column(Integer, nullable=True)
-    fat: Mapped[int] = mapped_column(Integer, nullable=True)
-    calories: Mapped[int] = mapped_column(Integer, nullable=True)
+    carbs: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "carbs >= 0 AND carbs <= 5000",
+            name="check_carbs_constraint"
+            ),
+        nullable=True,
+        )
+    protein: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "protein >= 0 AND protein <= 5000",
+            name="check_protein_constraint"
+            ),
+        nullable=True,
+        )
+    fat: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "fat >= 0 AND fat <= 5000",
+            name="check_fat_constraint"
+            ),
+        nullable=True
+        )
+    calories: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "calories >= 0 AND calories <= 5000",
+            name="check_calories_constraint"
+            ),
+        nullable=True
+        )
     foods: Mapped[dict] = mapped_column(JSONType, default=dict)
     time_of_meal: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -115,6 +144,14 @@ class Meal_Settings(Base):
     # TODO why did we have the is_active? for notifications?
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     show_calories: Mapped[bool] = mapped_column(Boolean, default=True)
+    reminder_time_before_min: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "reminder_time_before_min >= 0 AND reminder_time_before_min <= 60",
+            name="check_reminder_constraint"
+            ),
+        nullable=True
+        )
 
 
 class Meal_Images(Base):
@@ -140,10 +177,34 @@ class Foods(Base):
 
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     serving_size_grams: Mapped[int] = mapped_column(Integer)
-    calories_per_100_grams: Mapped[int] = mapped_column(Integer)
-    carbohydrates_per_100_grams: Mapped[int] = mapped_column(Integer)
-    fat_per_100_grams: Mapped[int] = mapped_column(Integer)
-    protein_per_100_grams: Mapped[int] = mapped_column(Integer)
+    calories_per_100_grams: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "calories_per_100_grams >= 0 AND calories_per_100_grams <= 1000",
+            name="check_calories_in_100_constraint"
+            ),
+        )
+    carbs_per_100_grams: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "carbs_per_100_grams >= 0 AND carbs_per_100_grams <= 1000",
+            name="check_carbs_in_100_constraint"
+            ),
+        )
+    fat_per_100_grams: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "fat_per_100_grams >= 0 AND fat_per_100_grams <= 1000",
+            name="check_fat_in_100_constraint"
+            ),
+        )
+    protein_per_100_grams: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "protein_per_100_grams >= 0 AND protein_per_100_grams <= 1000",
+            name="check_protein_in_100_constraint"
+            ),
+        )
     micronutrients: Mapped[dict] = mapped_column(JSONType, default=dict)
     ingredients: Mapped[list[str]] = mapped_column(ARRAY(String))
 
@@ -161,10 +222,18 @@ class Meal_Foods(Base):
         nullable=False,
         index=True
         )
-    quantity: Mapped[int] = mapped_column(Integer, nullable=False)
+    quantity: Mapped[int] = mapped_column(
+        Integer,
+        CheckConstraint(
+            "quantity >= 0 AND quantity <= 10000",
+            name="check_quantity_constraint"
+            ),
+        nullable=False,
+        )
     units: Mapped[Food_Units] = mapped_column(
         SAEnum(Food_Units),
         default=Food_Units.GRAMS
         )
 
 # TODO consider if we want tags for the meals.
+# TODO consider daily summary table to store analysis if we decided on that
