@@ -1,6 +1,5 @@
 from datetime import datetime
 from enum import Enum
-from typing import List
 
 from sqlalchemy import (
     Integer,
@@ -33,7 +32,7 @@ class MealType(str, Enum):
     DINNER = "dinner"
     SNACK = "snack"
     UNSPECIFIED = "unspecified"
-    
+
 
 class Location(str, Enum):
     """
@@ -45,8 +44,8 @@ class Location(str, Enum):
     RESTAURAUNT = "restauraunt"
     UNSPECIFIED = "unspecified"
     # TODO: consider other locations
-    
-    
+
+
 class Food_Units(str, Enum):
     """
     Food_Units class is an Enum of units food portions are reported in to
@@ -101,7 +100,8 @@ class Meal(Base):
         nullable=False,
         default=Location.UNSPECIFIED
         )
-    # TODO: consider columns: serving size, verified vsestimated macros, is_manual, confidence score if is ML related
+    # TODO: consider columns: verified vs estimated macros,
+    # is_manual, confidence score if is ML related
 
 
 class Meal_Settings(Base):
@@ -137,20 +137,20 @@ class Meal_Images(Base):
 
 class Foods(Base):
     __tablename__ = "foods"
-    
+
     name: Mapped[str] = mapped_column(String(150), nullable=False)
     serving_size_grams: Mapped[int] = mapped_column(Integer)
-    calories_per_100_grams :Mapped[int] = mapped_column(Integer)
+    calories_per_100_grams: Mapped[int] = mapped_column(Integer)
     carbohydrates_per_100_grams: Mapped[int] = mapped_column(Integer)
     fat_per_100_grams: Mapped[int] = mapped_column(Integer)
     protein_per_100_grams: Mapped[int] = mapped_column(Integer)
     micronutrients: Mapped[dict] = mapped_column(JSONType, default=dict)
     ingredients: Mapped[list[str]] = mapped_column(ARRAY(String))
-    
+
 
 class Meal_Foods(Base):
     __tablename__ = "meal_foods"
-    
+
     meal_id: Mapped[int] = mapped_column(
         ForeignKey("meals.id", ondelete="CASCADE"),
         nullable=False,
@@ -166,5 +166,5 @@ class Meal_Foods(Base):
         SAEnum(Food_Units),
         default=Food_Units.GRAMS
         )
-    
-# TODO consider if we want tags for the meals. can make a tag and tag junction table
+
+# TODO consider if we want tags for the meals.
