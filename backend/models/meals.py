@@ -57,7 +57,6 @@ class Food_Units(str, Enum):
     CUPS = "cups"
     SERVINGS = "servings"
     OUNCES = "ounces"
-    # TODO: consider other locations
 
 
 # Constants
