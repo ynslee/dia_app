@@ -23,7 +23,7 @@ class DiabetesType(str, enum.Enum):
     none = "none"
     prediabetic = "prediabetic"
     type1 = "type1"
-    ype2 = "type2"
+    type2 = "type2"
     gdm = "gestational diabetes"
 
 #should this be just metric/imperial
@@ -62,7 +62,7 @@ class Profile(Base):
     gender: Mapped[Gender] = mapped_column(SAEnum(Gender, native_enum=False), default=Gender.undisclosed)
     diabetes_type: Mapped[DiabetesType] = mapped_column(SAEnum(DiabetesType, native_enum=False), default=DiabetesType.none)
 
-    user: Mapped["User"] = relationship(back_populates="profile")
+#    user: Mapped["User"] = relationship(back_populates="profile")
 
 class AccountSettings(Base):
     __tablename__ = "account_settings"
@@ -77,7 +77,7 @@ class AccountSettings(Base):
 
     checklist: Mapped[dict] = mapped_column(JSONType, default=dict)
 
-    user: Mapped["User"] = relationship(back_populates="settings")
+#    user: Mapped["User"] = relationship(back_populates="settings")
 
 # Indexes
 Index("ix_profile_user", Profile.user_id)
