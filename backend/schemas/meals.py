@@ -12,50 +12,64 @@ class MealBase(BaseModel):
     """
     
     id: int | None = Field(
-      default=None,
-		  description="id of meal if already created",
-		  json_schema_extra={"example":"3"}
-	    )
+        default=None,
+        description="ID of meal if already created",
+        json_schema_extra={"example": "3"},
+    )
     carbs: int | None = Field(
-      default=None,
-		  description="total amount of carbs in meal in grams",
-		  json_schema_extra={"example":"120"}
-		  )
+        default=None,
+        ge=0,
+        le=5000,
+        description="Total carbs in grams",
+        json_schema_extra={"example": "120"},
+    )
     protein: int | None = Field(
-		  default=None,
-		  description="total amount of protein in meal in grams",
-		  json_schema_extra={"example":"11"}
-		  )
+        default=None,
+        ge=0,
+        le=5000,
+        description="Total protein in grams",
+        json_schema_extra={"example": "11"},
+    )
     fat: int | None = Field(
-		  default=None,
-		  description="total amount of fat in meal in grams",
-		  json_schema_extra={"example":"18"}
-		  )
+        default=None,
+        ge=0,
+        le=5000,
+        description="Total fat in grams",
+        json_schema_extra={"example": "18"},
+    )
     calories: int | None = Field(
-		  default=None,
-		  description="total calories in meal",
-		  json_schema_extra={"example":"450"}
-		  )
+        default=None,
+        ge=0,
+        le=5000,
+        description="Total calories",
+        json_schema_extra={"example": "450"},
+    )
+    foods: dict | None = Field(
+        default=None,
+        description="Structured foods payload for the meal",
+        json_schema_extra={"example": {"items": []}},
+    )
     time_of_meal: datetime | None = Field(
-		  default=None,
-		  description="UTC timecode of date and time of meal",
-		  json_schema_extra={"example":"2025-12-05T14:30:00Z"}
-		  )
+        default=None,
+        description="UTC timestamp when the meal was eaten",
+        json_schema_extra={"example": "2025-12-05T14:30:00Z"},
+    )
     note: str | None = Field(
-		  default=None,
-		  description="User provided note",
-		  json_schema_extra={"example":"my note"}
-		  )
+        default=None,
+        max_length=200,
+        description="User note (<=200 chars)",
+        json_schema_extra={"example": "my note"},
+    )
     meal_type: MealType | None = Field(
-		  default=MealType.UNSPECIFIED,
-		  description="Meal Type: Breakfast, Lunch, Dinner, Snack, Unspecified",
-		  json_schema_extra={"example":"Lunch"}
-		  )
+        default=MealType.UNSPECIFIED,
+        description="Meal Type: breakfast, lunch, dinner, snack, unspecified",
+        json_schema_extra={"example": "lunch"},
+    )
     location: Location | None = Field(
-		  default=Location.UNSPECIFIED,
-		  description="location of meal: home, restaurent, unspecified",
-		  json_schema_extra={"example":"home"}
-		  )
+        default=Location.UNSPECIFIED,
+        description="Meal location: home, restauraunt, unspecified",
+        json_schema_extra={"example": "home"},
+    )
 
 
 # TODO what do we want to require for the meals?
@@ -65,46 +79,21 @@ class MealCreate(MealBase):
     body for creation of new meal entry.
     """
 
-    carbs: int | None = Field(
-      default=None,
-		  description="total amount of carbs in meal in grams",
-		  json_schema_extra={"example":"120"}
-		  )
-    protein: int | None = Field(
-		  default=None,
-		  description="total amount of protein in meal in grams",
-		  json_schema_extra={"example":"11"}
-		  )
-    fat: int | None = Field(
-		  default=None,
-		  description="total amount of fat in meal in grams",
-		  json_schema_extra={"example":"18"}
-		  )
-    calories: int | None = Field(
-		  default=None,
-		  description="total calories in meal",
-		  json_schema_extra={"example":"450"}
-		  )
     time_of_meal: datetime = Field(
-		  default_factory=lambda: datetime.now(timezone.utc),
-		  description="UTC timecode of date and time of meal",
-		  json_schema_extra={"example":"2025-12-05T14:30:00Z"}
-		  )
-    note: str | None = Field(
-		  default=None,
-		  description="User provided note",
-		  json_schema_extra={"example":"my note"}
-		  )
+        default_factory=lambda: datetime.now(timezone.utc),
+        description="UTC timestamp when the meal was eaten",
+        json_schema_extra={"example": "2025-12-05T14:30:00Z"},
+    )
     meal_type: MealType = Field(
-		  default=MealType.UNSPECIFIED,
-		  description="Meal Type: Breakfast, Lunch, Dinner, Snack, Unspecified",
-		  json_schema_extra={"example":"Lunch"}
-		  )
+        default=MealType.UNSPECIFIED,
+        description="Meal Type: breakfast, lunch, dinner, snack, unspecified",
+        json_schema_extra={"example": "lunch"},
+    )
     location: Location = Field(
-		  default=Location.UNSPECIFIED,
-		  description="location of meal: home, restaurent, unspecified",
-		  json_schema_extra={"example":"home"}
-		  )
+        default=Location.UNSPECIFIED,
+        description="Meal location: home, restauraunt, unspecified",
+        json_schema_extra={"example": "home"},
+    )
 
 
 class MealUpdate(MealBase):
@@ -114,10 +103,10 @@ class MealUpdate(MealBase):
     """
     
     id: int = Field(
-      default=...,
-		  description="id of meal to update",
-		  json_schema_extra={"example":"3"}
-		  )
+        default=...,
+        description="ID of meal to update",
+        json_schema_extra={"example": "3"},
+    )
 
 
 class MealRead(BaseModel):
@@ -126,50 +115,37 @@ class MealRead(BaseModel):
     fields needed for fufillment of GET requests.
     """
     
-    id: int = Field(
-      default=...,
-		  description="id of meal if already created",
-		  )
-    carbs: int | None = Field(
-		  default=...,
-		  description="total amount of carbs in meal in grams",
-		  )
-    protein: int | None = Field(
-		  default=...,
-		  description="total amount of protein in meal in grams",
-		  )
-    fat: int | None = Field(
-		  default=...,
-		  description="total amount of fat in meal in grams",
-		  )
-    calories: int | None = Field(
-		  default=...,
-		  description="total calories in meal",
-		  )
+    id: int = Field(default=..., description="Meal ID")
+    user_id: int | None = Field(
+        default=None,
+        description="Owner user ID (if present in response)",
+    )
+    carbs: int | None = Field(default=None, description="Total carbs in grams")
+    protein: int | None = Field(default=None, description="Total protein in grams")
+    fat: int | None = Field(default=None, description="Total fat in grams")
+    calories: int | None = Field(default=None, description="Total calories")
+    foods: dict | None = Field(default=None, description="Structured foods payload")
     time_of_meal: datetime = Field(
-		  default=...,
-		  description="UTC timecode of date and time of meal",
-		  )
-    note: str | None = Field(
-		  default=...,
-		  description="User provided note",
-		  )
-    meal_type: MealType = Field(
-		  default=...,
-		  description="Meal Type: Breakfast, Lunch, Dinner, Snack, Unspecified",
-		  )
-    location: Location = Field(
-		  default=...,
-		  description="location of meal: home, restaurent, unspecified",
-		  )
-    created_at: datetime = Field(
         default=...,
-        description="Time measurement entry created"
-        )
+        description="UTC timestamp when the meal was eaten",
+    )
+    note: str | None = Field(default=None, description="User note (<=200 chars)")
+    meal_type: MealType = Field(
+        default=...,
+        description="Meal Type: breakfast, lunch, dinner, snack, unspecified",
+    )
+    location: Location = Field(
+        default=...,
+        description="Meal location: home, restauraunt, unspecified",
+    )
+    created_at: datetime | None = Field(
+        default=None,
+        description="Created timestamp if tracked",
+    )
     updated_at: datetime | None = Field(
         default=None,
-        description="Time measurement entry updated"
-        )
+        description="Updated timestamp if tracked",
+    )
     
     model_config = ConfigDict(
         from_attributes=True,
@@ -179,10 +155,12 @@ class MealRead(BaseModel):
             "examples": [
                 {
                     "id": 1,
+                    "user_id": 42,
                     "carbs": 30,
                     "protein": 15,
                     "fat": 16,
                     "calories": 398,
+                    "foods": {"items": []},
                     "note": "user note",
                     "meal_type": "lunch",
                     "location": "home",
@@ -204,25 +182,27 @@ class MealSettingsBase(BaseModel):
     """
     
     schedule: dict | None = Field(
-		default=None,
-		description="",
-		json_schema_extra={"example":""}
-	)
+        default=None,
+        description="User meal schedule preferences",
+        json_schema_extra={"example": {"mon": ["08:00", "12:00", "18:00"]}},
+    )
     is_active: bool | None = Field(
-		default=None,
-		description="",
-		json_schema_extra={"example":""}
-	)
+        default=None,
+        description="Whether reminders/meal tracking is enabled",
+        json_schema_extra={"example": True},
+    )
     show_calories: bool | None = Field(
-		default=None,
-		description="",
-		json_schema_extra={"example":""}
-	)
+        default=None,
+        description="Toggle calories visibility",
+        json_schema_extra={"example": True},
+    )
     reminder_time_before_min: int | None = Field(
-		default=None,
-		description="",
-		json_schema_extra={"example":""}
-	)
+        default=None,
+        ge=0,
+        le=60,
+        description="Minutes before meal to send reminder",
+        json_schema_extra={"example": 15},
+    )
 
 
 class MealSettingsUpdate(MealSettingsBase):
@@ -237,29 +217,23 @@ class MealSettingsRead(BaseModel):
     fields needed for fufillment of GET requests.
     """
     
-    schedule: dict | None = Field()
-    is_active: bool | None = Field()
-    show_calories: bool | None = Field()
-    reminder_time_before_min: int | None = Field()
+    schedule: dict | None = Field(default=None)
+    is_active: bool | None = Field(default=None)
+    show_calories: bool | None = Field(default=None)
+    reminder_time_before_min: int | None = Field(default=None)
 
 
     model_config = ConfigDict(
         from_attributes=True,
         extra="ignore",
         json_schema_extra={
-            "title": "MeasurementRead",
+            "title": "MealSettingsRead",
             "examples": [
                 {
-                    "id": 1,
-                    "measurement_type": "bp",
-                    "value_1": 120,
-                    "value_2": 78,
-                    "source": "wrist",
-                    "note": None,
-                    "symptoms": "lightheaded",
-                    "time_taken": "2025-11-05T14:29:00Z",
-                    "created_at": "2025-11-05T14:30:00Z",
-                    "updated_at": None
+                    "schedule": {"mon": ["08:00", "12:00"]},
+                    "is_active": True,
+                    "show_calories": True,
+                    "reminder_time_before_min": 15
                 }
             ]
         }
@@ -273,32 +247,99 @@ class MealImageBase(BaseModel):
     fields for request body related to meal image api.
     """
     
-    meal_id: int | None = Field()
-    image_url: str | None = Field()
-    source: str | None = Field()
-    is_thumbnail: bool | None = Field()
-    metadata: dict | None = Field()
+    meal_id: int | None = Field(
+        default=None,
+        description="Associated meal ID",
+        json_schema_extra={"example": 1},
+    )
+    image_url: str | None = Field(
+        default=None,
+        description="Image URL",
+        json_schema_extra={"example": "https://example.com/image.jpg"},
+    )
+    source: str | None = Field(
+        default=None,
+        description="Image source e.g. user/upload/provider",
+        json_schema_extra={"example": "user"},
+    )
+    is_thumbnail: bool | None = Field(
+        default=None,
+        description="Whether this is the thumbnail image",
+        json_schema_extra={"example": False},
+    )
+    metadata: dict | None = Field(
+        default=None,
+        description="Additional metadata (dimensions, labels, etc.)",
+        json_schema_extra={"example": {"width": 800, "height": 600}},
+    )
 
 
-class MealImgaeCreate(MealImageBase):
+class MealImageCreate(MealImageBase):
     """
-    MealImgaeCreate class inherits from MealBase and maps to fields in POST
-    request body for creation of new meal entry.
+    MealImageCreate maps to POST body for new meal image.
     """
+
+    meal_id: int = Field(
+        default=...,
+        description="Associated meal ID",
+        json_schema_extra={"example": 1},
+    )
+    image_url: str = Field(
+        default=...,
+        description="Image URL",
+        json_schema_extra={"example": "https://example.com/image.jpg"},
+    )
+    is_thumbnail: bool = Field(
+        default=False,
+        description="Whether this is the thumbnail image",
+        json_schema_extra={"example": False},
+    )
+    metadata: dict | None = Field(
+        default=None,
+        description="Additional metadata (dimensions, labels, etc.)",
+        json_schema_extra={"example": {"width": 800, "height": 600}},
+    )
 
 
 class MealImageUpdate(MealImageBase):
     """
-    MealImageUpdate class inherits from MealImageBase all optional fields and
-    requires meal id  to be provided.
+    MealImageUpdate allows updating image metadata.
     """
+
+    meal_id: int = Field(
+        default=...,
+        description="Associated meal ID",
+        json_schema_extra={"example": 1},
+    )
 
 
 class MealImageRead(BaseModel):
     """
-    MealImageRead class inherits from pydantic BaseModel and provides all
-    fields needed for fufillment of GET requests.
+    MealImageRead provides response fields for meal images.
     """
+
+    meal_id: int = Field(default=..., description="Associated meal ID")
+    image_url: str = Field(default=..., description="Image URL")
+    source: str | None = Field(default=None, description="Image source")
+    is_thumbnail: bool = Field(default=False, description="Is thumbnail flag")
+    metadata: dict | None = Field(default=None, description="Image metadata")
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="ignore",
+        json_schema_extra={
+            "title": "MealImageRead",
+            "examples": [
+                {
+                    "meal_id": 1,
+                    "image_url": "https://example.com/image.jpg",
+                    "source": "user",
+                    "is_thumbnail": False,
+                    "metadata": {"width": 800, "height": 600},
+                }
+            ],
+        },
+    )
 
 
 # ---------- FOODS SCHEMAS ----------
@@ -309,14 +350,55 @@ class FoodBase(BaseModel):
     fields for request body related to meal api.
     """
 
-    name: str | None = Field()
-    serving_size_grams: int | None = Field()
-    calories_per_100_grams: int | None = Field()
-    carbs_per_100_grams: int | None = Field()
-    fat_per_100_grams: int | None = Field()
-    protein_100_grams: int | None = Field()
-    micronutrients: dict | None = Field()
-    ingredients: list[str] | None = Field()
+    name: str | None = Field(
+        default=None,
+        description="Food name",
+        json_schema_extra={"example": "Grilled Chicken Breast"},
+    )
+    serving_size_grams: int | None = Field(
+        default=None,
+        ge=0,
+        description="Serving size in grams",
+        json_schema_extra={"example": 140},
+    )
+    calories_per_100_grams: int | None = Field(
+        default=None,
+        ge=0,
+        le=1000,
+        description="Calories per 100g",
+        json_schema_extra={"example": 165},
+    )
+    carbs_per_100_grams: int | None = Field(
+        default=None,
+        ge=0,
+        le=1000,
+        description="Carbs per 100g",
+        json_schema_extra={"example": 0},
+    )
+    fat_per_100_grams: int | None = Field(
+        default=None,
+        ge=0,
+        le=1000,
+        description="Fat per 100g",
+        json_schema_extra={"example": 3},
+    )
+    protein_per_100_grams: int | None = Field(
+        default=None,
+        ge=0,
+        le=1000,
+        description="Protein per 100g",
+        json_schema_extra={"example": 31},
+    )
+    micronutrients: dict | None = Field(
+        default=None,
+        description="Micronutrient breakdown",
+        json_schema_extra={"example": {"sodium_mg": 74}},
+    )
+    ingredients: list[str] | None = Field(
+        default=None,
+        description="List of ingredients",
+        json_schema_extra={"example": ["chicken", "salt", "pepper"]},
+    )
 
 
 class FoodCreate(FoodBase):
@@ -325,6 +407,46 @@ class FoodCreate(FoodBase):
     body for creation of new meal entry.
     """
 
+    name: str = Field(
+        default=...,
+        description="Food name",
+        json_schema_extra={"example": "Grilled Chicken Breast"},
+    )
+    serving_size_grams: int = Field(
+        default=...,
+        ge=0,
+        description="Serving size in grams",
+        json_schema_extra={"example": 140},
+    )
+    calories_per_100_grams: int = Field(
+        default=...,
+        ge=0,
+        le=1000,
+        description="Calories per 100g",
+        json_schema_extra={"example": 165},
+    )
+    carbs_per_100_grams: int = Field(
+        default=...,
+        ge=0,
+        le=1000,
+        description="Carbs per 100g",
+        json_schema_extra={"example": 0},
+    )
+    fat_per_100_grams: int = Field(
+        default=...,
+        ge=0,
+        le=1000,
+        description="Fat per 100g",
+        json_schema_extra={"example": 3},
+    )
+    protein_per_100_grams: int = Field(
+        default=...,
+        ge=0,
+        le=1000,
+        description="Protein per 100g",
+        json_schema_extra={"example": 31},
+    )
+
 
 class FoodUpdate(FoodBase):
     """
@@ -332,9 +454,126 @@ class FoodUpdate(FoodBase):
     meal id  to be provided.
     """
 
+    id: int = Field(
+        default=...,
+        description="Food ID to update",
+        json_schema_extra={"example": 5},
+    )
+
 
 class FoodRead(BaseModel):
     """
     FoodRead class inherits from pydantic BaseModel and provides all
     fields needed for fufillment of GET requests.
     """
+
+    id: int = Field(default=..., description="Food ID")
+    name: str = Field(default=..., description="Food name")
+    serving_size_grams: int = Field(default=..., description="Serving size in grams")
+    calories_per_100_grams: int = Field(default=..., description="Calories per 100g")
+    carbs_per_100_grams: int = Field(default=..., description="Carbs per 100g")
+    fat_per_100_grams: int = Field(default=..., description="Fat per 100g")
+    protein_per_100_grams: int = Field(default=..., description="Protein per 100g")
+    micronutrients: dict | None = Field(default=None, description="Micros map")
+    ingredients: list[str] | None = Field(default=None, description="Ingredients list")
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="ignore",
+        json_schema_extra={
+            "title": "FoodRead",
+            "examples": [
+                {
+                    "id": 5,
+                    "name": "Grilled Chicken Breast",
+                    "serving_size_grams": 140,
+                    "calories_per_100_grams": 165,
+                    "carbs_per_100_grams": 0,
+                    "fat_per_100_grams": 3,
+                    "protein_per_100_grams": 31,
+                    "micronutrients": {"sodium_mg": 74},
+                    "ingredients": ["chicken", "salt", "pepper"],
+                }
+            ],
+        },
+    )
+
+
+class MealFoodBase(BaseModel):
+    """
+    MealFoodBase holds the meal-food association payload.
+    """
+
+    meal_id: int | None = Field(
+        default=None,
+        description="Meal ID",
+        json_schema_extra={"example": 1},
+    )
+    food_id: int | None = Field(
+        default=None,
+        description="Food ID",
+        json_schema_extra={"example": 5},
+    )
+    quantity: int | None = Field(
+        default=None,
+        ge=0,
+        le=10000,
+        description="Quantity of food",
+        json_schema_extra={"example": 150},
+    )
+    units: Food_Units | None = Field(
+        default=Food_Units.GRAMS,
+        description="Units for quantity",
+        json_schema_extra={"example": "grams"},
+    )
+
+
+class MealFoodCreate(MealFoodBase):
+    """
+    MealFoodCreate maps to POST body for meal-food association.
+    """
+
+    meal_id: int = Field(default=..., description="Meal ID")
+    food_id: int = Field(default=..., description="Food ID")
+    quantity: int = Field(default=..., description="Quantity of food", ge=0, le=10000)
+    units: Food_Units = Field(
+        default=Food_Units.GRAMS,
+        description="Units for quantity",
+        json_schema_extra={"example": "grams"},
+    )
+
+
+class MealFoodUpdate(MealFoodBase):
+    """
+    MealFoodUpdate allows updating a meal-food association.
+    """
+
+    meal_id: int = Field(default=..., description="Meal ID")
+    food_id: int = Field(default=..., description="Food ID")
+
+
+class MealFoodRead(BaseModel):
+    """
+    MealFoodRead response schema for meal-food associations.
+    """
+
+    meal_id: int = Field(default=..., description="Meal ID")
+    food_id: int = Field(default=..., description="Food ID")
+    quantity: int = Field(default=..., description="Quantity of food")
+    units: Food_Units = Field(default=..., description="Units for quantity")
+
+    model_config = ConfigDict(
+        from_attributes=True,
+        extra="ignore",
+        json_schema_extra={
+            "title": "MealFoodRead",
+            "examples": [
+                {
+                    "meal_id": 1,
+                    "food_id": 5,
+                    "quantity": 150,
+                    "units": "grams",
+                }
+            ],
+        },
+    )
