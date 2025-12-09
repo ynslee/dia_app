@@ -44,6 +44,7 @@ class MealBase(BaseModel):
         description="Total calories",
         json_schema_extra={"example": "450"},
     )
+    # TODO decide how we want to handle foods with the photos and AI analysis
     foods: dict | None = Field(
         default=None,
         description="Structured foods payload for the meal",
@@ -67,7 +68,7 @@ class MealBase(BaseModel):
     )
     location: Location | None = Field(
         default=Location.UNSPECIFIED,
-        description="Meal location: home, restauraunt, unspecified",
+        description="Meal location: home, restaurant, unspecified",
         json_schema_extra={"example": "home"},
     )
 
@@ -91,7 +92,7 @@ class MealCreate(MealBase):
     )
     location: Location = Field(
         default=Location.UNSPECIFIED,
-        description="Meal location: home, restauraunt, unspecified",
+        description="Meal location: home, restaurant, unspecified",
         json_schema_extra={"example": "home"},
     )
 
@@ -136,7 +137,7 @@ class MealRead(BaseModel):
     )
     location: Location = Field(
         default=...,
-        description="Meal location: home, restauraunt, unspecified",
+        description="Meal location: home, restaurant, unspecified",
     )
     created_at: datetime | None = Field(
         default=None,
@@ -180,17 +181,18 @@ class MealSettingsBase(BaseModel):
     MealSettingsBase class inherits from pydantic BaseModel and provides
     optional fields for request body related to meal settings api.
     """
-    
+    # TODO decide how we want to handle the schedule
     schedule: dict | None = Field(
         default=None,
         description="User meal schedule preferences",
         json_schema_extra={"example": {"mon": ["08:00", "12:00", "18:00"]}},
     )
-    is_active: bool | None = Field(
-        default=None,
-        description="Whether reminders/meal tracking is enabled",
-        json_schema_extra={"example": True},
-    )
+    # TODO decide how we want to handle the is_active
+    # is_active: bool | None = Field(
+    #     default=None,
+    #     description="what is this for?",
+    #     json_schema_extra={"example": True},
+    # )
     show_calories: bool | None = Field(
         default=None,
         description="Toggle calories visibility",
@@ -204,7 +206,7 @@ class MealSettingsBase(BaseModel):
         json_schema_extra={"example": 15},
     )
 
-
+# TODO this is the same as MealSettings Base, do we need separate?
 class MealSettingsUpdate(MealSettingsBase):
     """
     MealSettingsUpdate class inherits from MealSettingsBase all optional fields.
@@ -308,8 +310,18 @@ class MealImageUpdate(MealImageBase):
 
     meal_id: int = Field(
         default=...,
-        description="Associated meal ID",
+        description="Current associated meal ID",
         json_schema_extra={"example": 1},
+    )
+    photo_id: int = Field(
+        default=...,
+        description="ID of photo to update",
+        json_schema_extra={"example": 2},
+    )
+    new_meal_id: int | None= Field(
+        default=None,
+        description="New meal ID to associate with photo (replaces previous meal id)",
+        json_schema_extra={"example": 3},
     )
 
 
@@ -322,6 +334,7 @@ class MealImageRead(BaseModel):
     image_url: str = Field(default=..., description="Image URL")
     source: str | None = Field(default=None, description="Image source")
     is_thumbnail: bool = Field(default=False, description="Is thumbnail flag")
+    # TODO do we want to send metadata with get requests?
     metadata: dict | None = Field(default=None, description="Image metadata")
 
     model_config = ConfigDict(
@@ -400,7 +413,7 @@ class FoodBase(BaseModel):
         json_schema_extra={"example": ["chicken", "salt", "pepper"]},
     )
 
-
+# TODO do we need a density field?
 class FoodCreate(FoodBase):
     """
     FoodCreate class inherits from FoodBase and maps to fields in POST request
@@ -498,82 +511,4 @@ class FoodRead(BaseModel):
         },
     )
 
-
-class MealFoodBase(BaseModel):
-    """
-    MealFoodBase holds the meal-food association payload.
-    """
-
-    meal_id: int | None = Field(
-        default=None,
-        description="Meal ID",
-        json_schema_extra={"example": 1},
-    )
-    food_id: int | None = Field(
-        default=None,
-        description="Food ID",
-        json_schema_extra={"example": 5},
-    )
-    quantity: int | None = Field(
-        default=None,
-        ge=0,
-        le=10000,
-        description="Quantity of food",
-        json_schema_extra={"example": 150},
-    )
-    units: Food_Units | None = Field(
-        default=Food_Units.GRAMS,
-        description="Units for quantity",
-        json_schema_extra={"example": "grams"},
-    )
-
-
-class MealFoodCreate(MealFoodBase):
-    """
-    MealFoodCreate maps to POST body for meal-food association.
-    """
-
-    meal_id: int = Field(default=..., description="Meal ID")
-    food_id: int = Field(default=..., description="Food ID")
-    quantity: int = Field(default=..., description="Quantity of food", ge=0, le=10000)
-    units: Food_Units = Field(
-        default=Food_Units.GRAMS,
-        description="Units for quantity",
-        json_schema_extra={"example": "grams"},
-    )
-
-
-class MealFoodUpdate(MealFoodBase):
-    """
-    MealFoodUpdate allows updating a meal-food association.
-    """
-
-    meal_id: int = Field(default=..., description="Meal ID")
-    food_id: int = Field(default=..., description="Food ID")
-
-
-class MealFoodRead(BaseModel):
-    """
-    MealFoodRead response schema for meal-food associations.
-    """
-
-    meal_id: int = Field(default=..., description="Meal ID")
-    food_id: int = Field(default=..., description="Food ID")
-    quantity: int = Field(default=..., description="Quantity of food")
-    units: Food_Units = Field(default=..., description="Units for quantity")
-
-    model_config = ConfigDict(
-        from_attributes=True,
-        extra="ignore",
-        json_schema_extra={
-            "title": "MealFoodRead",
-            "examples": [
-                {
-                    "meal_id": 1,
-                    "food_id": 5,
-                    "quantity": 150,
-                    "units": "grams",
-                }
-            ],
-        },
-    )
+# TODO: decide if any schemas are needed for meal-food associations
