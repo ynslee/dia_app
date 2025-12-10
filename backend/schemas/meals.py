@@ -187,12 +187,6 @@ class MealSettingsBase(BaseModel):
         description="User meal schedule preferences",
         json_schema_extra={"example": {"mon": ["08:00", "12:00", "18:00"]}},
     )
-    # TODO decide how we want to handle the is_active
-    # is_active: bool | None = Field(
-    #     default=None,
-    #     description="what is this for?",
-    #     json_schema_extra={"example": True},
-    # )
     show_calories: bool | None = Field(
         default=None,
         description="Toggle calories visibility",
@@ -220,7 +214,6 @@ class MealSettingsRead(BaseModel):
     """
     
     schedule: dict | None = Field(default=None)
-    is_active: bool | None = Field(default=None)
     show_calories: bool | None = Field(default=None)
     reminder_time_before_min: int | None = Field(default=None)
 
@@ -233,7 +226,6 @@ class MealSettingsRead(BaseModel):
             "examples": [
                 {
                     "schedule": {"mon": ["08:00", "12:00"]},
-                    "is_active": True,
                     "show_calories": True,
                     "reminder_time_before_min": 15
                 }
