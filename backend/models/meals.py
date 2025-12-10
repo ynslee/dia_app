@@ -140,8 +140,6 @@ class Meal_Settings(Base):
         index=True
         )
     schedule: Mapped[dict] = mapped_column(JSONType, default=dict)
-    # TODO why did we have the is_active? for notifications?
-    is_active: Mapped[bool] = mapped_column(Boolean, default=True)
     show_calories: Mapped[bool] = mapped_column(Boolean, default=True)
     reminder_time_before_min: Mapped[int] = mapped_column(
         Integer,
