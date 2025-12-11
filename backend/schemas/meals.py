@@ -10,7 +10,7 @@ class MealBase(BaseModel):
     MealBase class inherits from pydantic BaseModel and provides optional
     fields for request body related to meal api.
     """
-    
+
     id: int | None = Field(
         default=None,
         description="ID of meal if already created",
@@ -49,7 +49,7 @@ class MealBase(BaseModel):
         default=None,
         description="Structured foods payload for the meal",
         json_schema_extra={
-            "example": {"foods": [{"food_name","quantity","units" }]}
+            "example": {"foods": [{"food_name", "quantity", "units"}]}
             },
     )
     time_of_meal: datetime | None = Field(
@@ -104,7 +104,7 @@ class MealUpdate(MealBase):
     MealUpdate class inherits from MealBase all optional fields and requires
     meal id  to be provided.
     """
-    
+
     id: int = Field(
         default=...,
         description="ID of meal to update",
@@ -117,22 +117,40 @@ class MealRead(BaseModel):
     MealRead class inherits from pydantic BaseModel and provides all
     fields needed for fufillment of GET requests.
     """
-    
+
     id: int = Field(default=..., description="Meal ID")
     user_id: int | None = Field(
         default=None,
         description="Owner user ID (if present in response)",
     )
-    carbs: int | None = Field(default=None, description="Total carbs in grams")
-    protein: int | None = Field(default=None, description="Total protein in grams")
-    fat: int | None = Field(default=None, description="Total fat in grams")
-    calories: int | None = Field(default=None, description="Total calories")
-    foods: dict | None = Field(default=None, description="Structured foods payload")
+    carbs: int | None = Field(
+        default=None,
+        description="Total carbs in grams"
+        )
+    protein: int | None = Field(
+        default=None,
+        description="Total protein in grams"
+        )
+    fat: int | None = Field(
+        default=None,
+        description="Total fat in grams"
+        )
+    calories: int | None = Field(
+        default=None,
+        description="Total calories"
+        )
+    foods: dict | None = Field(
+        default=None,
+        description="Structured foods payload"
+        )
     time_of_meal: datetime = Field(
         default=...,
         description="UTC timestamp when the meal was eaten",
     )
-    note: str | None = Field(default=None, description="User note (<=200 chars)")
+    note: str | None = Field(
+        default=None,
+        description="User note (<=200 chars)"
+        )
     meal_type: MealType = Field(
         default=...,
         description="Meal Type: breakfast, lunch, dinner, snack, unspecified",
@@ -149,7 +167,7 @@ class MealRead(BaseModel):
         default=None,
         description="Updated timestamp if tracked",
     )
-    
+
     model_config = ConfigDict(
         from_attributes=True,
         extra="ignore",
@@ -208,11 +226,10 @@ class MealSettingsRead(BaseModel):
     MealSettingsRead class inherits from pydantic BaseModel and provides all
     fields needed for fufillment of GET requests.
     """
-    
+
     schedule: dict | None = Field(default=None)
     show_calories: bool | None = Field(default=None)
     reminder_time_before_min: int | None = Field(default=None)
-
 
     model_config = ConfigDict(
         from_attributes=True,
@@ -229,14 +246,16 @@ class MealSettingsRead(BaseModel):
         }
     )
 
+
 # ---------- MEAL IMAGES SCHEMAS ----------
+
 
 class MealImageBase(BaseModel):
     """
     MealImageBase class inherits from pydantic BaseModel and provides optional
     fields for request body related to meal image api.
     """
-    
+
     meal_id: int | None = Field(
         default=None,
         description="Associated meal ID",
@@ -306,9 +325,10 @@ class MealImageUpdate(MealImageBase):
         description="ID of photo to update",
         json_schema_extra={"example": 2},
     )
-    new_meal_id: int | None= Field(
+    new_meal_id: int | None = Field(
         default=None,
-        description="New meal ID to associate with photo (replaces previous meal id)",
+        description="""
+        New meal ID to associate with photo (replaces previous meal id)""",
         json_schema_extra={"example": 3},
     )
 
@@ -401,6 +421,7 @@ class FoodBase(BaseModel):
         json_schema_extra={"example": ["chicken", "salt", "pepper"]},
     )
 
+
 # TODO do we need a density field?
 class FoodCreate(FoodBase):
     """
@@ -468,15 +489,42 @@ class FoodRead(BaseModel):
     fields needed for fufillment of GET requests.
     """
 
-    id: int = Field(default=..., description="Food ID")
-    name: str = Field(default=..., description="Food name")
-    serving_size_grams: int = Field(default=..., description="Serving size in grams")
-    calories_per_100_grams: int = Field(default=..., description="Calories per 100g")
-    carbs_per_100_grams: int = Field(default=..., description="Carbs per 100g")
-    fat_per_100_grams: int = Field(default=..., description="Fat per 100g")
-    protein_per_100_grams: int = Field(default=..., description="Protein per 100g")
-    micronutrients: dict | None = Field(default=None, description="Micros map")
-    ingredients: list[str] | None = Field(default=None, description="Ingredients list")
+    id: int = Field(
+        default=...,
+        description="Food ID"
+        )
+    name: str = Field(
+        default=...,
+        description="Food name"
+        )
+    serving_size_grams: int = Field(
+        default=...,
+        description="Serving size in grams"
+        )
+    calories_per_100_grams: int = Field(
+        default=...,
+        description="Calories per 100g"
+        )
+    carbs_per_100_grams: int = Field(
+        default=...,
+        description="Carbs per 100g"
+        )
+    fat_per_100_grams: int = Field(
+        default=...,
+        description="Fat per 100g"
+        )
+    protein_per_100_grams: int = Field(
+        default=...,
+        description="Protein per 100g"
+        )
+    micronutrients: dict | None = Field(
+        default=None,
+        description="Micros map"
+        )
+    ingredients: list[str] | None = Field(
+        default=None,
+        description="Ingredients list"
+        )
 
     model_config = ConfigDict(
         from_attributes=True,
