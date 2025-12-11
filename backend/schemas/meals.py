@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from pydantic import BaseModel, Field, ConfigDict
-from models.meals import MealType, Location, Food_Units
+from models.meals import MealType, Location
 
 
 # ---------- MEAL SCHEMAS ----------
@@ -48,7 +48,9 @@ class MealBase(BaseModel):
     foods: dict | None = Field(
         default=None,
         description="Structured foods payload for the meal",
-        json_schema_extra={"example": {"items": []}},
+        json_schema_extra={
+            "example": {"foods": [{"food_name","quantity","units" }]}
+            },
     )
     time_of_meal: datetime | None = Field(
         default=None,
