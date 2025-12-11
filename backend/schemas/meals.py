@@ -176,9 +176,9 @@ class MealRead(BaseModel):
 
 # ---------- MEAL SETTINGS SCHEMAS ----------
 
-class MealSettingsBase(BaseModel):
+class MealSettingsUpdate(BaseModel):
     """
-    MealSettingsBase class inherits from pydantic BaseModel and provides
+    MealSettingsUpdate class inherits from pydantic BaseModel and provides
     optional fields for request body related to meal settings api.
     """
     # TODO decide how we want to handle the schedule
@@ -199,12 +199,6 @@ class MealSettingsBase(BaseModel):
         description="Minutes before meal to send reminder",
         json_schema_extra={"example": 15},
     )
-
-# TODO this is the same as MealSettings Base, do we need separate?
-class MealSettingsUpdate(MealSettingsBase):
-    """
-    MealSettingsUpdate class inherits from MealSettingsBase all optional fields.
-    """
 
 
 class MealSettingsRead(BaseModel):
