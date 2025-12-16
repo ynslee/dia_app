@@ -123,9 +123,11 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+        onPressed: () async { //setup as a lambda as it wants a callback
+          await showPhotoReminder();
+        },
+        tooltip: 'sent notice',
+        child: const Icon(Icons.add_a_photo),
       ),
     );
   }
