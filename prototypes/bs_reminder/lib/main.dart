@@ -1,9 +1,19 @@
+import 'package:bs_reminder/notification_service.dart'; // local file
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  // makes sure connected to underlying platform i.e. Android
+  // should call before inti platform related stuff like notifications
+  WidgetsFlutterBinding.ensureInitialized();
+  // the notification init
+  await initNotifications()
+  // standard runApp() call
   runApp(const MyApp());
 }
 
+
+
+// DEFAULT PROJECT FROM CREATION
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
