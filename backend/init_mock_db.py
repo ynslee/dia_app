@@ -1,5 +1,5 @@
 from db import Base, engine
-from models import account
+from models import account, measurements
 # noqa: F401  - just to register models
 
 

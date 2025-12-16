@@ -10,7 +10,8 @@ from models.account import (
     Units,
     BGUnits,
 )
-
+from models.measurements import Measurement, MeasurementType
+from datetime import datetime, timezone
 
 def seed_mock_data() -> None:
     # Make sure tables exist (safe if already created)
@@ -92,6 +93,135 @@ def seed_mock_data() -> None:
     finally:
         db.close()
 
+def seed_measurements() -> None:
+    db = SessionLocal()
+    try:
+        # Clear existing measurements if you want a clean slate:
+        # db.query(Measurement).delete()
+        # db.commit()
+
+        examples = [
+            # --- User 1 ---
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_SUGAR,
+                value_1=6.1,
+                value_2=None,
+                source="manual",
+                time_taken=datetime(2025, 11, 5, 7, 30, tzinfo=timezone.utc),
+                note="Fasting before breakfast",
+                symptoms=None,
+                user_id=1,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_SUGAR,
+                value_1=8.5,
+                value_2=None,
+                source="manual",
+                time_taken=datetime(2025, 11, 5, 9, 0, tzinfo=timezone.utc),
+                note="2h after oatmeal",
+                symptoms="a bit tired",
+                user_id=1,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_PRESSURE,
+                value_1=120,
+                value_2=78,  # diastolic -> must NOT be None for bp
+                source="omron cuff",
+                time_taken=datetime(2025, 11, 5, 9, 5, tzinfo=timezone.utc),
+                note="Sitting, left arm",
+                symptoms="lightheaded",
+                user_id=1,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.HEART_RATE,
+                value_1=72,
+                value_2=None,
+                source="fitbit",
+                time_taken=datetime(2025, 11, 5, 9, 5, tzinfo=timezone.utc),
+                note="Resting 5 min",
+                symptoms=None,
+                user_id=1,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.WEIGHT,
+                value_1=68.5,
+                value_2=None,
+                source="smart scale",
+                time_taken=datetime(2025, 11, 5, 7, 25, tzinfo=timezone.utc),
+                note=None,
+                symptoms=None,
+                user_id=1,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.HEIGHT,
+                value_1=165.0,
+                value_2=None,
+                source="clinic",
+                time_taken=datetime(2025, 1, 10, 10, 0, tzinfo=timezone.utc),
+                note="Measured at clinic",
+                symptoms=None,
+                user_id=1,
+            ),
+
+            # --- User 2 ---
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_SUGAR,
+                value_1=7.8,
+                value_2=None,
+                source="manual",
+                time_taken=datetime(2025, 11, 5, 7, 15, tzinfo=timezone.utc),
+                note="Fasting",
+                symptoms=None,
+                user_id=2,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_SUGAR,
+                value_1=10.2,
+                value_2=None,
+                source="manual",
+                time_taken=datetime(2025, 11, 5, 21, 30, tzinfo=timezone.utc),
+                note="2h after pasta",
+                symptoms="nausea",
+                user_id=2,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.BLOOD_PRESSURE,
+                value_1=140,
+                value_2=90,
+                source="home cuff",
+                time_taken=datetime(2025, 11, 5, 21, 35, tzinfo=timezone.utc),
+                note="After dinner",
+                symptoms="headache",
+                user_id=2,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.WEIGHT,
+                value_1=83.0,
+                value_2=None,
+                source="bathroom scale",
+                time_taken=datetime(2025, 11, 4, 7, 20, tzinfo=timezone.utc),
+                note=None,
+                symptoms=None,
+                user_id=2,
+            ),
+            Measurement(
+                measurement_type=MeasurementType.HEART_RATE,
+                value_1=95,
+                value_2=None,
+                source="fitbit",
+                time_taken=datetime(2025, 11, 4, 18, 0, tzinfo=timezone.utc),
+                note="30 min walk",
+                symptoms=None,
+                user_id=2,
+            ),
+        ]
+
+        db.add_all(examples)
+        db.commit()
+        print(f"Inserted {len(examples)} mock measurements.")
+    finally:
+        db.close()
 
 if __name__ == "__main__":
     seed_mock_data()
+    seed_measurements()

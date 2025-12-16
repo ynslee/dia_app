@@ -8,7 +8,7 @@ from schemas.account import UserOut, AccountView
 
 #TODO: async in measurement router
 router = APIRouter(
-	prefix="/v1/account",
+	prefix="/account",
 	tags=["account"])
 
 @router.get(
