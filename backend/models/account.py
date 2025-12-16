@@ -1,16 +1,18 @@
 from datetime import datetime, timezone
 import enum
 
-from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum, Index
+from sqlalchemy import String, Boolean, DateTime, ForeignKey, Enum as SAEnum, Index, JSON as JSONType
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import Base
 
-try:
-    from sqlalchemy.dialects.postgresql import JSONB  # type: ignore
-    JSONType = JSONB
-except Exception:
-    from sqlalchemy import JSON as JSONType  # type: ignore
+#JSONB is a special type that belongs to PostgreSQL. MySQL does not underastand JSONB
+#try:
+#    from sqlalchemy.dialects.postgresql import JSONB  # type: ignore
+#    JSONType = JSONB
+#except Exception:
+#    from sqlalchemy import JSON as JSONType  # type: ignore
+
 
 # Enums
 class Gender(str, enum.Enum):
@@ -32,8 +34,8 @@ class Units(str, enum.Enum):
     imperial = "imperial"
 
 class BGUnits(str, enum.Enum):
-	mmol = "mmol/L"
-	mg = "mg/dL"
+    mmol = "mmol/L"
+    mg = "mg/dL"
 
 # Tables
 class User(Base):
@@ -62,7 +64,7 @@ class Profile(Base):
     gender: Mapped[Gender] = mapped_column(SAEnum(Gender, native_enum=False), default=Gender.undisclosed)
     diabetes_type: Mapped[DiabetesType] = mapped_column(SAEnum(DiabetesType, native_enum=False), default=DiabetesType.none)
 
-#    user: Mapped["User"] = relationship(back_populates="profile")
+    user: Mapped["User"] = relationship(back_populates="profile")
 
 class AccountSettings(Base):
     __tablename__ = "account_settings"
@@ -73,11 +75,11 @@ class AccountSettings(Base):
     email_notifications_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     push_notifications_enabled: Mapped[bool] = mapped_column(Boolean, default=True)
     preferred_units: Mapped[Units] = mapped_column(SAEnum(Units, native_enum=False), default=Units.metric)
-    preferred_units_BG: Mapped[BGUnits] = mapped_column(SAEnum(BGUnits, native_enum=False), default=Units.mmol)
+    preferred_units_BG: Mapped[BGUnits] = mapped_column(SAEnum(BGUnits, native_enum=False), default=BGUnits.mmol)
 
     checklist: Mapped[dict] = mapped_column(JSONType, default=dict)
 
-#    user: Mapped["User"] = relationship(back_populates="settings")
+    user: Mapped["User"] = relationship(back_populates="settings")
 
 # Indexes
 Index("ix_profile_user", Profile.user_id)

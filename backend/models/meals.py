@@ -161,7 +161,11 @@ class Meal_Images(Base):
     image_url: Mapped[str] = mapped_column(String(2000), nullable=False)
     source: Mapped[str] = mapped_column(String(100), nullable=True)
     is_thumbnail: Mapped[bool] = mapped_column(Boolean, default=False)
-    metadata: Mapped[dict] = mapped_column(JSONType, default=dict)
+    #TODO: this attribute is causing problem because metadata is the column name in Base
+    #maybe change it to image_metadata
+    #or if you want actual DB column to still be called metadata, do
+    #image_metadata: Mapped[dict] = mapped_column("metadata", JSONType)
+    #metadata: Mapped[dict] = mapped_column(JSONType, default=dict)
     image_hash: Mapped[str] = mapped_column(
         String(MAX_IMAGE_HASH),
         nullable=False
