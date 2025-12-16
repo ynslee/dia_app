@@ -6,7 +6,7 @@ void main() async {
   // should call before inti platform related stuff like notifications
   WidgetsFlutterBinding.ensureInitialized();
   // the notification init
-  await initNotifications()
+  await initNotifications();
   // standard runApp() call
   runApp(const MyApp());
 }
