@@ -5,7 +5,7 @@ from database.base import Datastore
 from database.mockdb import open_db_sesssion
 from fastapi import APIRouter, Depends, status, Response
 from fastapi.responses import JSONResponse
-from models.measurement import (
+from schemas.measurement import (
     MeasurementCreate,
     MeasurementRead,
     MeasurementUpdate
