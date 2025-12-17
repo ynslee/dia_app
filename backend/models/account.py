@@ -6,10 +6,10 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from db import Base
 
-#JSONB is a special type that belongs to PostgreSQL. MySQL does not underastand JSONB
+# is a special type that belongs to PostgreSQL. MySQL does not underastand JSONB
 #try:
 #    from sqlalchemy.dialects.postgresql import JSONB  # type: ignore
-#    JSONType = JSONB
+#JSONType = JSON
 #except Exception:
 #    from sqlalchemy import JSON as JSONType  # type: ignore
 

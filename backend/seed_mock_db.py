@@ -1,5 +1,6 @@
 # seed_mock_db.py
 
+import asyncio
 from db import SessionLocal, Base, engine
 from models.account import (
     User,
@@ -12,18 +13,19 @@ from models.account import (
 )
 from models.measurements import Measurement, MeasurementType
 from datetime import datetime, timezone
+from sqlalchemy import delete
 
-def seed_mock_data() -> None:
-    # Make sure tables exist (safe if already created)
-    Base.metadata.create_all(bind=engine)
 
-    db = SessionLocal()
-    try:
+async def seed_mock_data() -> None:
+
+     async with SessionLocal() as db:
+
         # Clear existing rows
-        db.query(AccountSettings).delete()
-        db.query(Profile).delete()
-        db.query(User).delete()
-        db.commit()
+        await db.execute(delete(Measurement))
+        await db.execute(delete(AccountSettings))
+        await db.execute(delete(Profile))
+        await db.execute(delete(User))
+        await db.commit()
 
         # Create User
         user1 = User(
@@ -32,7 +34,7 @@ def seed_mock_data() -> None:
             is_active=True,
         )
         db.add(user1)
-        db.flush()  # gets user1.id from DB
+        await db.flush()  # gets user1.id from DB
 
         profile1 = Profile(
             user_id=user1.id,
@@ -63,7 +65,7 @@ def seed_mock_data() -> None:
             is_active=True,
         )
         db.add(user2)
-        db.flush()  # gets user2.id
+        await db.flush()  # gets user2.id
 
         profile2 = Profile(
             user_id=user2.id,
@@ -88,17 +90,8 @@ def seed_mock_data() -> None:
         db.add_all([profile2, settings2])
 
         # 4) Save everything
-        db.commit()
+        await db.commit()
         print("✅ Seeded mock users, profiles and settings.")
-    finally:
-        db.close()
-
-def seed_measurements() -> None:
-    db = SessionLocal()
-    try:
-        # Clear existing measurements if you want a clean slate:
-        # db.query(Measurement).delete()
-        # db.commit()
 
         examples = [
             # --- User 1 ---
@@ -217,11 +210,8 @@ def seed_measurements() -> None:
         ]
 
         db.add_all(examples)
-        db.commit()
-        print(f"Inserted {len(examples)} mock measurements.")
-    finally:
-        db.close()
+        await db.commit()
+        print(f"✅ Inserted {len(examples)} mock measurements.")
 
 if __name__ == "__main__":
-    seed_mock_data()
-    seed_measurements()
+    asyncio.run(seed_mock_data())

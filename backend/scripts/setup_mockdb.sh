@@ -3,7 +3,7 @@ set -euo pipefail
 
 # --- CONFIG ---
 ENV_NAME="diabetes-api"
-DB_URL="mysql+pymysql://diabetes:diabetes@localhost:3307/diabetes_mock"
+DB_URL="mysql+asyncmy://diabetes:diabetes@localhost:3307/diabetes_mock"
 
 echo "👉 Setting up mock environment using Conda env '$ENV_NAME' and MySQL at $DB_URL"
 

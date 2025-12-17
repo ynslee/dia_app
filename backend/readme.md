@@ -15,7 +15,7 @@ conda activate diabetes-api
 ```
 #### 2. Set database URL
 ```
-export DATABASE_URL="mysql+pymysql://diabetes:diabetes@localhost:3307/diabetes_mock"
+export DATABASE_URL="mysql+asyncmy://diabetes:diabetes@localhost:3307/diabetes_mock"
 ```
 #### 3. DB container running check
 ```

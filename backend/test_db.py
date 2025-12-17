@@ -1,23 +1,31 @@
 from sqlalchemy import select
 from db import SessionLocal
 from models.account import User
-from models.measurements import Measurement, MeasurementType
+from models.measurements import Measurement
+import asyncio
 
-def main() -> None:
-    db = SessionLocal()
-    try:
-        # build a SELECT * FROM users query
-        stmt = select(User)
-        result = db.scalars(stmt).all()
+async def main() -> None:
+    # open an async DB session
+    async with SessionLocal() as db:
+        # ---- Users ----
+        result = await db.execute(select(User))
+        users = result.scalars().all()
 
         print("Users in DB:")
-        for u in result:
-            print(f"- id={u.id}, email={u.email}, username={u.username}, is_active={u.is_active}")
-        
-            """Print all measurements in the database."""
-    # order by user_id then time_taken so it's easier to read
-        stmt = select(Measurement).order_by(Measurement.user_id, Measurement.time_taken)
-        measurements = db.scalars(stmt).all()
+        if not users:
+            print("  (no users found)")
+        for u in users:
+            print(
+                f"- id={u.id}, email={u.email}, "
+                f"username={u.username}, is_active={u.is_active}"
+            )
+
+        # ---- Measurements ----
+        # order by user_id then time_taken so it's easier to read
+        result_meas = await db.execute(
+            select(Measurement).order_by(Measurement.user_id, Measurement.time_taken)
+        )
+        measurements = result_meas.scalars().all()
 
         print("\nMeasurements in DB:")
         if not measurements:
@@ -32,9 +40,7 @@ def main() -> None:
                 f"source={m.source}, time_taken={m.time_taken}, "
                 f"note={m.note}, symptoms={m.symptoms}"
             )
-    finally:
-        db.close()
 
 #running it as a script now
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())

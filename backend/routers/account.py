@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
 from db import get_db
@@ -15,22 +15,23 @@ router = APIRouter(
 	path="/users",
 	response_model=list[UserOut],
 )
-def list_users(db: Session = Depends(get_db)):
+async def list_users(db: AsyncSession = Depends(get_db)):
 	"""
     list_users uses GET and returns all users in the system.
 	"""
-	users = db.scalars(select(User)).all()
+	result = await db.execute(select(User))
+	users = result.scalars().all()
 	return users
 
 @router.get(
 	path="/users/{user_id}",
 	response_model=UserOut,
 )
-def get_user(user_id: int, db: Session = Depends(get_db)):
+async def get_user(user_id: int, db: AsyncSession = Depends(get_db)):
     """
     get_user uses GET and returns one user by user_id.
     """
-    user = db.get(User, user_id)
+    user = await db.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
     return user
@@ -39,14 +40,19 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
 	path="/me/{user_id}",
 	response_model=AccountView,
 )
-def get_account_view(user_id: int, db: Session = Depends(get_db)):
-    user = db.get(User, user_id)
+async def get_account_view(user_id: int, db: AsyncSession = Depends(get_db)):
+    user = await db.get(User, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-    profile = db.scalar(select(Profile).where(Profile.user_id == user.id))
-    settings = db.scalar(
+    result_profile = await db.execute(
+        select(Profile).where(Profile.user_id == user.id)
+    )
+    profile = result_profile.scalars().first()
+
+    result_settings = await db.execute(
         select(AccountSettings).where(AccountSettings.user_id == user.id)
     )
+    settings = result_settings.scalars().first()
 
     return AccountView(user=user, profile=profile, settings=settings)

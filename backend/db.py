@@ -1,9 +1,14 @@
 #this is like a database helper
 from __future__ import annotations
 from datetime import datetime, timezone
-from typing import Any
+from typing import AsyncGenerator
 from sqlalchemy import DateTime, create_engine
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, sessionmaker, Session
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 import os
 
 #TO DO: this is leaving space for normal dev to use SQLite.
@@ -11,7 +16,7 @@ import os
 #    - Otherwise, default to a local SQLite file (dev.db).
 DATABASE_URL = os.getenv(
     "DATABASE_URL",
-    "sqlite:///./dev.db",  # fallback for dev
+    "mysql+asyncmy://diabetes:diabetes@localhost:3307/diabetes_mock",  # fallback for dev
 )
 def utcnow() -> datetime:
     return datetime.now(timezone.utc)
@@ -37,12 +42,12 @@ class Base(DeclarativeBase):
 	def __repr__(self) -> str:
 		return f"<{self.__class__.__name__} id={getattr(self, 'id', None)!r}>"
 
-engine = create_engine(
+engine = create_async_engine(
     DATABASE_URL,
     future=True,
 )
 
-SessionLocal = sessionmaker(
+SessionLocal = async_sessionmaker(
     bind=engine,
     autoflush=False,
     autocommit=False,
@@ -50,10 +55,14 @@ SessionLocal = sessionmaker(
 )
 
 
-def get_db():
-    """FastAPI dependency: yields a DB session."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def get_db() -> AsyncGenerator[AsyncSession, None]:
+    """
+    FastAPI dependency that provides an AsyncSession.
+    Usage in routers: db: AsyncSession = Depends(get_db)
+    """
+    async with SessionLocal() as session:
+        try:
+            yield session
+        finally:
+            # session closed automatically by async with
+            pass
