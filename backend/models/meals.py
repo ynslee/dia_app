@@ -164,7 +164,7 @@ class Meal_Images(Base):
     #TODO: this attribute is causing problem because metadata is the column name in Base
     #maybe change it to image_metadata
     #or if you want actual DB column to still be called metadata, do
-    #image_metadata: Mapped[dict] = mapped_column("metadata", JSONType)
+    image_metadata: Mapped[dict] = mapped_column(JSONType, default=dict)
     #metadata: Mapped[dict] = mapped_column(JSONType, default=dict)
     image_hash: Mapped[str] = mapped_column(
         String(MAX_IMAGE_HASH),
