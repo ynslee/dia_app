@@ -1,12 +1,46 @@
-import 'package:bs_reminder/notification_service.dart'; // local file
+import 'package:bs_reminder/services/notification_service.dart'; // local file
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz; //timezone package
+import 'package:timezone/data/latest.dart' as tzdata;    // database initialization
+import 'services/hc_meal_schedule_service.dart';//replace with actual
+import 'services/meal_reminder_service.dart';
 
 void main() async {
   // makes sure connected to underlying platform i.e. Android
   // should call before inti platform related stuff like notifications
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize timezone
+  tzdata.initializeTimeZones();
+
   // the notification init
   await initNotifications();
+  // defensive rescheduling of notifications
+  for (final reminder in hardcodedMealReminders) {
+    await MealReminderScheduler.schedule(reminder);
+  }
+  //
+  // test of scheduled notification
+  await notifications.zonedSchedule(
+    100,
+    'Breakfast Reminder',
+    'Tap to take a photo!',
+    tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)), // 1 min from now
+    const NotificationDetails(
+      android: AndroidNotificationDetails(
+        'meal_reminders',
+        'Meal Reminders',
+        importance: Importance.max,
+        priority: Priority.high,
+      ),
+    ),
+    androidScheduleMode: AndroidScheduleMode.exact,
+    matchDateTimeComponents: DateTimeComponents.time,
+    payload: 'breakfast',
+  );
+  //end test
+
   // standard runApp() call
   runApp(const MyApp());
 }
