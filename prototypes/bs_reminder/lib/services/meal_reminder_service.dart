@@ -42,7 +42,8 @@ class MealReminderScheduler {
     if (scheduled.isBefore(now)) {
       scheduled = scheduled.add(const Duration(days: 1));
     }
-
+    //debug print statement
+    print("Scheduled time: $scheduled");
     return scheduled;
   }
 
@@ -63,7 +64,7 @@ class MealReminderScheduler {
           priority: Priority.high,
         ),
       ),
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle, // does it need exact while idle? had to add extra permission in android manifest
+      androidScheduleMode: AndroidScheduleMode.inexact, // does it need exact while idle? had to add extra permission in android manifest
       matchDateTimeComponents: DateTimeComponents.time, // makes repeat daily by matching on ly time
       payload: reminder.meal.name,
     );

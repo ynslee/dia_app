@@ -29,7 +29,7 @@ FlutterLocalNotificationsPlugin();
    if (androidImplementation != null) {
      // this allowed the notifications on button press to work
      final grantedGeneral = await androidImplementation.requestNotificationsPermission();
-     // adding this permissions request allowed the timed notificiations to work
+     // adding this permissions request allowed the timed notifications to work
      final grantedExact = await androidImplementation.requestExactAlarmsPermission();
    }
  }
