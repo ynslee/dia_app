@@ -1,11 +1,12 @@
 import 'package:bs_reminder/services/notification_service.dart'; // local file
-import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter/material.dart';//standard material design import
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';//for notifications
 import 'package:timezone/timezone.dart' as tz; //timezone package
 import 'package:timezone/data/latest.dart' as tzdata;// database initialization
-import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';//to get device timezone
 import 'services/hc_meal_schedule_service.dart';//replace with actual
-import 'services/meal_reminder_service.dart';
+import 'services/meal_reminder_service.dart';//local file
+
 
 
 void main() async {
