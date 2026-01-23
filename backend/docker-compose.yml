@@ -1,0 +1,19 @@
+version: "3.9"
+
+services:
+  mysql-mock:
+    image: mysql:8
+    container_name: diabetes-mysql-mock
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: diabetes_mock
+      MYSQL_USER: diabetes
+      MYSQL_PASSWORD: diabetes
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_mock_data:/var/lib/mysql
+
+volumes:
+  mysql_mock_data:

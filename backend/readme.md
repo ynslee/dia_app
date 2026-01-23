@@ -1,0 +1,35 @@
+## How to Run the Project
+
+### 1. One-time setup (creates env + mock DB + seed data)
+
+Run the setup script once to get everything created and seeded:
+```
+cd /path/to/dia_app/backend
+./setup_mock_env.sh
+```
+### 2. How to start working
+
+#### 1. Activtae conda env
+```
+conda activate diabetes-api
+```
+#### 2. Set database URL
+```
+export DATABASE_URL="mysql+asyncmy://diabetes:diabetes@localhost:3307/diabetes_mock"
+```
+#### 3. DB container running check
+```
+docker compose ps
+```
+if not running already,
+```
+docker compose up -d mysql-mock
+```
+
+#### 4. Run the FastAPI server
+```
+uvicorn main:app --reload
+```
+
+#### 5.Open API docs in browser
+[```](http://localhost:8000/docs)
