@@ -30,6 +30,18 @@ class PhotoStorageService {
   static Future<void> savePhotos(List<File> photos) async {
     final file = await _getStorageFile();
     final paths = photos.map((f) => f.path).toList();
+
     await file.writeAsString(jsonEncode(paths));
+  }
+
+  static Future<void> deletePhoto(File photo, List<File> photoList) async {
+    try {
+      if (await photo.exists()) {
+        await photo.delete();
+      }
+    } catch (_) {
+      //add error behavior later
+    }
+    await savePhotos(photoList);
   }
 }

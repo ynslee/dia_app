@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: .fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Meal Pic and BS prototype'),
     );
   }
 }
@@ -132,6 +132,16 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  Future<void> _deletePhoto(int index) async {
+    final photo = _photos[index];
+
+    setState(() {
+      _photos.removeAt(index);
+    });
+
+    await PhotoStorageService.deletePhoto(photo, _photos);
+  }
+
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -170,13 +180,22 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: ListView.builder(
                   itemCount: _photos.length,
                     itemBuilder: (context, index) {
-                      return Padding(
+                      return Stack(
+                          children: [Padding(
                         padding: const EdgeInsets.all(8),
                         child: Image.file(
                           _photos[index],
                           height: 200,
                           fit: BoxFit.cover,
                         ),
+                          ),
+                            Positioned(
+                                child: IconButton(
+                                    icon: const Icon(Icons.delete, color: Colors.red),
+                                    onPressed: ()=> _deletePhoto(index),
+                                ),
+                      ),
+                          ],
                       );
                     },
                 ),
@@ -191,7 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
           await showPhotoReminder();
         },
         tooltip: 'sent notice',
-        child: const Icon(Icons.add_a_photo),
+        child: const Icon(Icons.add_alert),
       ),
     );
   }
