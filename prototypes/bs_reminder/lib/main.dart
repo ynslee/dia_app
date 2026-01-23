@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bs_reminder/services/notification_service.dart'; // local file
 import 'package:flutter/material.dart';//standard material design import
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';//for notifications
@@ -104,7 +106,15 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // int _counter = 0;
+  final List<File> _photos = [];
+
+  void _onPhotoPicked(File? file) {
+    if (file == null) return;
+
+    setState(() {
+      _photos.insert(0, file); // insert at beginning
+    });
+  }
 
   // void _incrementCounter() {
   //   setState(() {
@@ -158,11 +168,27 @@ class _MyHomePageState extends State<MyHomePage> {
             // testing out photo picking button
             PhotoButton(onPhotoPicked: (file) {
               if (file != null) {
-                print('Photo picked: ${file.path}');
+                print('Photo picked: ${file.path}');//debug print
+                _onPhotoPicked(file);//home page state setting func
               } else {
-                print('No photo selected');
+                print('No photo selected');//debug print
               }
             }
+            ),
+            Expanded(
+                child: ListView.builder(
+                  itemCount: _photos.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Image.file(
+                          _photos[index],
+                          height: 200,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                ),
             )
           ],
         ),

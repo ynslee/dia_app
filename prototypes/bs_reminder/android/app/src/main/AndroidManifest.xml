@@ -6,7 +6,8 @@
 <!--    permissions for photo taking and file access -->
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
-
+<!-- permissions to save files in this case photos not needed yet -->
+<!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
 
     <application
         android:label="bs_reminder"

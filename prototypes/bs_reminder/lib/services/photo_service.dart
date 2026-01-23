@@ -1,5 +1,6 @@
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:path_provider/path_provider.dart';
 
 enum  PhotoSource {
   camera,
@@ -22,9 +23,18 @@ class PhotoService {
 
     if (photo == null) return null; //stop if the process was cancelled
 
-    print('Photo path: ${photo.path}'); // debug printing for now
-    return File(photo.path);
-  } //convert Xfile to file
+    // print('Photo path: ${photo.path}'); // debug printing for now
+    final savedImage = _savePhoto(photo.path);
+    return savedImage;
+  }
 
+  static Future<File?> _savePhoto(String photoPath) async {
+    final Directory appDir = await getApplicationDocumentsDirectory();
+    final String fileName = 'meal_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+    final File savedImage = await File(photoPath).copy('${appDir.path}/$fileName');
+    print('Saved image: ${savedImage.path}'); //debug print
+    return savedImage;
+  }
 }
 
