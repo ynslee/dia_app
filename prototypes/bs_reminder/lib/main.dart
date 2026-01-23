@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bs_reminder/services/notification_service.dart'; // local file
+import 'package:bs_reminder/services/photo_storage_service.dart';
 import 'package:flutter/material.dart';//standard material design import
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';//for notifications
 import 'package:timezone/timezone.dart' as tz; //timezone package
@@ -106,39 +107,29 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<File> _photos = [];
+  List<File> _photos = []; //cant be final the way the init state is done
 
-  void _onPhotoPicked(File? file) {
+  void _onPhotoPicked(File? file) async {
     if (file == null) return;
 
     setState(() {
       _photos.insert(0, file); // insert at beginning
     });
+    await PhotoStorageService.savePhotos(_photos); //saving all everytime? can we just append?
   }
-
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // This call to setState tells the Flutter framework that something has
-  //     // changed in this State, which causes it to rerun the build method below
-  //     // so that the display can reflect the updated values. If we changed
-  //     // _counter without calling setState(), then the build method would not be
-  //     // called again, and so nothing would appear to happen.
-  //     _counter++;
-  //   });
-  // }
 
   @override
   void initState() {
     super.initState();
 
-    _scheduleMealReminders();
+    _loadPhotos();
   }
 
-  Future<void> _scheduleMealReminders() async {
-    // for (final reminder in hardcodedMealReminders) {
-    //   await MealReminderScheduler.schedule(reminder);
-    //   print("${reminder.meal} ${reminder.hour}:${reminder.minute}");
-    // }
+  Future<void> _loadPhotos() async {
+    final photos = await PhotoStorageService.loadPhotos();
+    setState(() {
+      _photos = photos;
+    });
   }
 
   @override
