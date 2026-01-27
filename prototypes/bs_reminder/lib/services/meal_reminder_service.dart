@@ -62,6 +62,13 @@ class MealReminderScheduler {
           'Meal Reminders',
           importance: Importance.max,
           priority: Priority.high,
+          actions: <AndroidNotificationAction>[ //adds action to notification
+            AndroidNotificationAction(
+              'TAKE_PHOTO',
+              'Take meal photo',
+              showsUserInterface: true,
+            )
+          ]
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.inexact, // does it need exact while idle? had to add extra permission in android manifest

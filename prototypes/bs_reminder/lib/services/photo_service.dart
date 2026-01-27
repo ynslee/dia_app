@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
@@ -28,6 +29,35 @@ class PhotoService {
     return savedImage;
   }
 
+  static Future<PhotoSource?> showSourceChooser(BuildContext context) async {
+    final PhotoSource? source = await showModalBottomSheet<PhotoSource>( //not sure if I want bottom sheet
+      context: context,
+      builder: (_) { //the _ ignores the build context
+        return SafeArea( //prevents UI overlapping, should use bottom sheet
+          child: Column(
+            mainAxisSize: MainAxisSize.min, // only use space needed
+            children: [
+              ListTile(
+                leading: const Icon(Icons.camera_alt),
+                title: const Text('Take photo'),
+                onTap: () => Navigator.pop(context, PhotoSource.camera), // closes bottom sheet, second val is return arg
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Choose from gallery'),
+                onTap: () => Navigator.pop(context, PhotoSource.gallery),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (source == null) return null;
+
+    return source;
+  }
+
   static Future<File?> _savePhoto(String photoPath) async {
     final Directory appDir = await getApplicationDocumentsDirectory();
     final String fileName = 'meal_${DateTime.now().millisecondsSinceEpoch}.jpg';
@@ -36,5 +66,6 @@ class PhotoService {
     print('Saved image: ${savedImage.path}'); //debug print
     return savedImage;
   }
+
 }
 

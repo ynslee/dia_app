@@ -1,4 +1,5 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'notification_router_service.dart';
 
 // create global notifications controller
 final FlutterLocalNotificationsPlugin notifications =
@@ -19,7 +20,11 @@ FlutterLocalNotificationsPlugin();
 
    // this is the global declared at top of file
    // initialize the settings made here to it
-   await notifications.initialize(settings);
+    // add setting for handling responses to notification actions
+   await notifications.initialize(
+     settings,
+     onDidReceiveNotificationResponse: _onNotificationResponse,
+   );
 
    // Request notification permission on Android 13+
    //this is the part that make the pop-up happen on your phone to grant access
@@ -31,6 +36,15 @@ FlutterLocalNotificationsPlugin();
      final grantedGeneral = await androidImplementation.requestNotificationsPermission();
      // adding this permissions request allowed the timed notifications to work
      final grantedExact = await androidImplementation.requestExactAlarmsPermission();
+   }
+ }
+
+ // pass to intialization of notification service
+ // check action id of response
+ void _onNotificationResponse(NotificationResponse response) {
+   if (response.actionId == "TAKE_PHOTO") {
+     //router to broadcast the take photo action
+     NotificationRouterService.handleTakePhoto();
    }
  }
 

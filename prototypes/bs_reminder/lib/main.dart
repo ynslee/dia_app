@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:bs_reminder/services/notification_router_service.dart';
 import 'package:bs_reminder/services/notification_service.dart'; // local file
+import 'package:bs_reminder/services/photo_service.dart';
 import 'package:bs_reminder/services/photo_storage_service.dart';
 import 'package:flutter/material.dart';//standard material design import
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';//for notifications
@@ -123,6 +125,25 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     _loadPhotos();
+    //start listening to broadcast stream for notification actions
+    NotificationRouterService.stream.listen((action) {
+      if (action == 'TAKE_PHOTO') {
+        _handleTakePhotoFromNotification();
+      }
+    });
+  }
+
+  Future<void> _handleTakePhotoFromNotification() async {
+    final PhotoSource? source = await PhotoService.showSourceChooser(context); //how to context pass here?
+    if (source == null) return;
+    final file = await PhotoService.pickPhoto(source);
+    if (file == null) return;
+
+
+    setState(() {
+      _photos.insert(0, file);
+    });
+    await PhotoStorageService.savePhotos(_photos);
   }
 
   Future<void> _loadPhotos() async {
